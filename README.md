@@ -9,3 +9,4 @@ The main functionality of the model will come first but over time I will try to 
 Some functionality will include:
     1) Having a scenario editor
     2) Having a scenario generator
+    3) A graphical display. Very Unlikely but possible
