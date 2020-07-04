@@ -17,10 +17,10 @@ public:
 private:
 	LogLevel m_CurrentLevel;
 
-	std::map<unsigned int, std::string> Info;
-	std::map<unsigned int, std::string> Warning;
-	std::map<unsigned int, std::string > Error;
-	std::map<unsigned int, std::string> CriticalError;
+	std::map<unsigned int, std::string> Info { {1 ,"Info message 1"}, {2, "Info message 2"} };
+	std::map<unsigned int, std::string> Warning { {1 ,"Warning message 1"}, {2, "Warning message 2"} };
+	std::map<unsigned int, std::string > Error { {1 ,"Error message 1"}, {2, "Error message 2"} };
+	std::map<unsigned int, std::string> CriticalError { {1 ,"Error message 1"}, {2, "Error message 2"} };
 
 	std::map<std::pair<LogLevel, int>, std::string> Recorded;
 
@@ -29,6 +29,7 @@ public:
 	~Log();
 
 	void LogFucntion(LogLevel level, unsigned int ErrorNumber);
+	void Clear();
 
 
 };
