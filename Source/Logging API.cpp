@@ -75,3 +75,13 @@ void Log::Clear()
 	LogFile.open("Logfile.txt", std::ios::out | std::ios::trunc);
 	LogFile.close();
 }
+
+void NewRun()
+{
+	std::fstream LogFile;
+	LogFile.open("Logfile.txt", std::ios::out | std::ios::app);
+
+	LogFile << "----------NEW RUN----------" << std::endl;
+
+	LogFile.close();
+}

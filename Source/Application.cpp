@@ -2,13 +2,17 @@
 
 #include "Menu.h"
 #include "Logging API.h"
+#include "Scenario.h"
 
 int main()
 {
-	std::cout << "Build Number: " << "[ 1 ]" << " Build Date: " << "02/07/2020" << std::endl;
+	std::cout << "Build Number: " << "[ 3 ]" << " Build Date: " << "02/07/2020" << std::endl;
 	
 	Menu menu(0);
 	menu.DisplayMainMenu(); //here for test purposes
+
+	Scenario test(1);
+	test.ScenarioEditor(); //here for test purposes
 
 	/*
 	{
