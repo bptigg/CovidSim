@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+#include "Logging API.h"
+
 class Menu
 {
 private:
@@ -10,5 +12,5 @@ public:
 	Menu(int Default);
 	~Menu();
 	
-	void DisplayMainMenu();
+	unsigned int DisplayMainMenu();
 };

@@ -10,8 +10,10 @@ Menu::~Menu()
 {
 }
 
-void Menu::DisplayMainMenu()
+unsigned int Menu::DisplayMainMenu()
 {
+	Log logMenu(Log::LogLevelInfo);
+
 	while (CorrectMenuInput == false)
 	{
 		std::cout << "1). Import Scenario " << std::endl;
@@ -37,9 +39,13 @@ void Menu::DisplayMainMenu()
 		case 4:
 			CorrectMenuInput = true;
 			exit(0);
+			break;
 		default:
 			std::cout << "Incorrect Input" << std::endl;
+			logMenu.LogFucntion(Log::LogLevelInfo, 1);
+			
 		}; 
 	}
+	return  m_Choice;
 }
 

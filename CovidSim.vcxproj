@@ -22,10 +22,12 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Logging API.cpp" />
     <ClCompile Include="Source\Menu.cpp" />
+    <ClCompile Include="Source\Scenario.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Logging API.h" />
     <ClInclude Include="Source\Menu.h" />
+    <ClInclude Include="Source\Scenario.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
