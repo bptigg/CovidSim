@@ -17,32 +17,37 @@ Scenario::~Scenario()
 
 void Scenario::ScenarioImport()
 {
+	bool FileFound = false;
 	std::ifstream ScenarioFile;
 	std::filesystem::path filepath = m_filepath;
 	
 	ScenarioFile.open(m_filepath);
-	if (ScenarioFile.is_open())
+
+	while (FileFound == false)
 	{
-		if (filepath.extension() == ".cvsn")
+		if (ScenarioFile.is_open())
 		{
-			//write some code here when i know what the perameters will be
-			ScenarioFile.close();
-		}
-		else
-		{
-			std::cout << "Wrong filepath" << std::endl;
+			if (filepath.extension() == ".cvsn")
 			{
-				Log logScenario(Log::LogLevelInfo);
-				logScenario.LogFucntion(Log::LogLevelWarning, 1);
+				//write some code here when i know what the perameters will be
+				ScenarioFile.close();
+			}
+			else
+			{
+				std::cout << "Wrong filepath" << std::endl;
+				{
+					Log logScenario(Log::LogLevelInfo);
+					logScenario.LogFucntion(Log::LogLevelWarning, 1);
+				}
 			}
 		}
-	}
-	else if (ScenarioFile.fail())
-	{
-		std::cout << "File not Found" << std::endl;
+		else if (ScenarioFile.fail())
 		{
-			Log log(Log::LogLevelInfo);
-			log.LogFucntion(Log::LogLevelCriticalError, 1);
+			std::cout << "File not Found" << std::endl;
+			{
+				Log log(Log::LogLevelInfo);
+				log.LogFucntion(Log::LogLevelCriticalError, 1);
+			}
 		}
 	}
 }
