@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <time.h>
 
 #include <string>
 #include <map>
@@ -31,6 +32,8 @@ public:
 	void LogFucntion(LogLevel level, unsigned int ErrorNumber);
 	void NewRun();
 	void Clear();
+
+	std::string GetCurrentTime();
 
 
 };

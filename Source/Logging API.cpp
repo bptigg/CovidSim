@@ -13,6 +13,7 @@ Log::~Log()
 
 	if (LogFile.is_open())
 	{
+		LogFile << GetCurrentTime() << std::endl;
 		for (auto elem : Recorded)
 		{
 			switch (elem.first.first)
@@ -76,7 +77,7 @@ void Log::Clear()
 	LogFile.close();
 }
 
-void NewRun()
+void Log::NewRun()
 {
 	std::fstream LogFile;
 	LogFile.open("Logfile.txt", std::ios::out | std::ios::app);
@@ -84,4 +85,12 @@ void NewRun()
 	LogFile << "----------NEW RUN----------" << std::endl;
 
 	LogFile.close();
+}
+
+std::string Log::GetCurrentTime()
+{
+	time_t CT = time(NULL); //CT = CurrentTime
+	char str[26];
+	ctime_s(str, sizeof str, &CT);
+	return str;
 }
