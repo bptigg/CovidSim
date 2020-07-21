@@ -6,7 +6,11 @@
 
 int main()
 {
-	std::cout << "Build Number: " << "[ 3 ]" << " Build Date: " << "02/07/2020" << std::endl;
+	{
+		Log log(Log::LogLevelInfo);
+		log.Clear();
+		std::cout << log.GetCurrentTime() << std::endl;
+	}
 	
 	Menu menu(0);
 	menu.DisplayMainMenu(); //here for test purposes
