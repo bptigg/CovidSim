@@ -4,7 +4,6 @@
 #include "Logging API.h"
 #include "Scenario.h"
 #include "Matrix.h"
-#include "Matrix.cpp"
 
 
 int main()

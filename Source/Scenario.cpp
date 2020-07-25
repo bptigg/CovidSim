@@ -133,7 +133,7 @@ void Scenario::csc(std::ofstream &Scenariofile, const std::string type, unsigned
 
 	Scenariofile << number << std::endl << std::endl;
 
-	for (int i = 0; i < number; i++)
+	for (unsigned int i = 0; i < number; i++)
 	{
 		int x, y = 0;
 		unsigned int tile_num, capacity, staff = 0;

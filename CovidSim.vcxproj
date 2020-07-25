@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Logging API.cpp" />
-    <ClCompile Include="Source\Matrix.cpp" />
     <ClCompile Include="Source\Menu.cpp" />
     <ClCompile Include="Source\Scenario.cpp" />
   </ItemGroup>
