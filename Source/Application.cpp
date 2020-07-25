@@ -3,6 +3,8 @@
 #include "Menu.h"
 #include "Logging API.h"
 #include "Scenario.h"
+#include "Matrix.h"
+
 
 int main()
 {
@@ -12,12 +14,17 @@ int main()
 		std::cout << log.GetCurrentTime() << std::endl;
 	}
 	
+	Matrix<int> test(2, 2);
+	test.PrintMat();
+
 	Menu menu(0);
-	menu.DisplayMainMenu(); //here for test purposes
-
-	Scenario test(1);
-	test.ScenarioEditor(); //here for test purposes
-
+	int choice = menu.DisplayMainMenu(); //here for test purposes
+	
+	if (choice == 2)
+	{
+		Scenario test;
+		test.ScenarioEditor(); //here for test purposes
+	}
 	/*
 	{
 		
@@ -26,7 +33,7 @@ int main()
 		log.LogFucntion(Log::LogLevelInfo, 1);
 		log.LogFucntion(Log::LogLevelWarning, 1);
 		log.LogFucntion(Log::LogLevelError, 1);
-		log.LogFucntion(Log::LogLevelCriticalError, 1);
+		log.LogFucntion(Log::LogLevelCriticalError, 1);                                                                          
 		//Currently here for log testing purposes
 	}
 

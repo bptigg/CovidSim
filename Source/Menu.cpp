@@ -29,7 +29,7 @@ unsigned int Menu::DisplayMainMenu()
 			CorrectMenuInput = true;
 			break;
 		case 2:
-			std::cout << "Create Scenario not available" << std::endl;
+			//std::cout << "Create Scenario not available" << std::endl;
 			CorrectMenuInput = true;
 			break;
 		case 3:
@@ -42,10 +42,10 @@ unsigned int Menu::DisplayMainMenu()
 			break;
 		default:
 			std::cout << "Incorrect Input" << std::endl;
-			logMenu.LogFucntion(Log::LogLevelInfo, 1);
+			logMenu.LogFucntion(Log::LogLevelWarning, 1);
 			
 		}; 
 	}
-	return  m_Choice;
+	return m_Choice;
 }
 

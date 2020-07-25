@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Logging API.h" />
+    <ClInclude Include="Source\Matrix.h" />
     <ClInclude Include="Source\Menu.h" />
     <ClInclude Include="Source\Scenario.h" />
   </ItemGroup>
