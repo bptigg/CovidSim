@@ -107,7 +107,6 @@ public:
 private:
 	void csc(std::ofstream &Scenariofile, const std::string type, unsigned int number); //Coord, staff, Capacity
 	int Input(std::string param);
-	double Inputp(std::string param);
 
 public:
 	Scenario(const std::string &filename);
