@@ -3,10 +3,13 @@
 #include <iostream>
 #include <fstream>
 #include <time.h>
+#include <chrono>
+#include <thread>
 
 #include <string>
 #include <map>
 #include <tuple>
+
 
 class Log
 {

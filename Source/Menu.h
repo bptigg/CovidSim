@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "Logging API.h"
+#include "Scenario.h"
 
 class Menu
 {

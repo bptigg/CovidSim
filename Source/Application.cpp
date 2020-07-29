@@ -14,17 +14,20 @@ int main()
 		std::cout << log.GetCurrentTime() << std::endl;
 	}
 	
-	Matrix<int> test(2, 2);
-	test.PrintMat();
+	Matrix<int>* test = new Matrix<int>(2, 2);
+	test->PrintMat();
+	delete test;
+
+	Matrix<int> test1(3,3);
+	test1.MatrixEdit(2, 1, 3);
+	test1.PrintMat();
+	test1.GetRow(2);
+	test1.GetCol(1);
+	test1.PrintMat();
 
 	Menu menu(0);
-	int choice = menu.DisplayMainMenu(); //here for test purposes
-	
-	if (choice == 2)
-	{
-		Scenario test;
-		test.ScenarioEditor(); //here for test purposes
-	}
+	menu.DisplayMainMenu(); //here for test purposes
+
 	/*
 	{
 		

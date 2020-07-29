@@ -22,6 +22,8 @@ unsigned int Menu::DisplayMainMenu()
 		std::cout << "4). Quit " << std::endl;
 		std::cin >> m_Choice;
 
+		Scenario scenario;
+
 		switch (m_Choice)
 		{
 		case 1:
@@ -31,6 +33,8 @@ unsigned int Menu::DisplayMainMenu()
 		case 2:
 			//std::cout << "Create Scenario not available" << std::endl;
 			CorrectMenuInput = true;
+			std::system("CLS");
+			scenario.ScenarioEditor();
 			break;
 		case 3:
 			std::cout << "Run Random Scenario not available" << std::endl;

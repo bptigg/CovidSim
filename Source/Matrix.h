@@ -1,8 +1,11 @@
 #pragma once
 
 #include <vector>
+#include <ostream>
 
 #include "Logging API.h"
+
+//#include "Scenario.h"
 
 template<typename T>
 class Matrix
@@ -27,24 +30,24 @@ public:
 	
 	void MatrixEdit(int rownum, int colnum, T value)
 	{
-		m_matrix[rownum][colnum] = value;
+		m_matrix[rownum - 1][colnum - 1] = value;
 	}
 
 
 	std::vector<T> GetRow(int row)
 	{
-		return m_matrix[row];
+		return m_matrix[row - 1];
 	}
 
 	std::vector<T> GetCol(int col)
 	{
 		std::vector<T>column;
 
-		for (int i = 0; i < m_rowsize; i++)
+		for (unsigned int i = 0; i < m_rowsize; i++)
 		{
-			column.push_back(m_matrix[i][col]);
+			column.push_back(m_matrix[i][col - 1]);
 		}
-		return col;
+		return column;
 	}
 
 	int GetSize()
@@ -69,6 +72,20 @@ public:
 			std::cout << std::endl;
 		}
 		std::cout << std::endl;
+	}
+
+	void PrintMat(std::ostream &Scenariofile)
+	{
+		for (unsigned int i = 0; i < m_rowsize; i++)
+		{
+			for (unsigned int x = 0; x < m_colsize; x++)
+			{
+				Scenariofile << m_matrix[i][x] << " ";
+			}
+
+			Scenariofile << std::endl;
+		}
+		Scenariofile << std::endl;
 	}
 
 	
