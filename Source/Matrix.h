@@ -18,7 +18,7 @@ private:
 
 public:
 	Matrix(int rownum, int colnum)
-		: m_rowsize(rownum), m_colsize(colnum), m_size(rownum* colnum)
+		: m_rowsize(rownum), m_colsize(colnum), m_size(rownum * colnum)
 	{
 		m_matrix.resize(rownum);
 
@@ -88,5 +88,44 @@ public:
 		Scenariofile << std::endl;
 	}
 
-	
+	void GetMatrix(std::ifstream& Scenariofile, std::string& text, unsigned int& amount)
+	{
+		Scenariofile.clear();
+		Scenariofile.seekg(0, std::ios::beg);
+
+		std::string row;
+		std::stringstream proxyrow;
+
+		char MatrixLine;
+
+		bool found = false;
+
+		while (getline(Scenariofile, row))
+		{
+			if (row.find(text) != std::string::npos)
+			{
+				found = true;
+			}
+			if (found)
+			{
+				for (int a = 0; a < amount; a++)
+				{
+					getline(Scenariofile, row);
+					proxyrow << row;
+					int col = 0;
+					while (proxyrow.get(MatrixLine) && col < amount)
+					{
+						if (MatrixLine != ' ')
+						{
+							int val = (int)MatrixLine - 48;
+
+							MatrixEdit((a + 1), (col + 1), val);
+							col++;
+						}
+					}
+				}
+			}
+			break;
+		}
+	}
 };

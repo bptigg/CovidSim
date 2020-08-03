@@ -2,13 +2,17 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <filesystem>
 #include <stdlib.h>
+#include <utility>
 
 #include <string>
 #include <map>
+#include <any>
 #include "Matrix.h"
 
+#include "Setup_info.h"
 
 #include "Logging API.h"
 
@@ -17,6 +21,8 @@ class Scenario
 private:
 	std::string m_filepath = "Scenarios/";
 	std::map<unsigned int, std::pair<int, std::pair<int, int>>> Transport; 
+
+	int errors = 0;
 
 public:
 
@@ -80,7 +86,6 @@ public:
 	struct Scenario_Parameters
 	{
 		unsigned int count;
-		std::string Output_file_name;
 
 		/*Data to output*/
 		unsigned int R0;
@@ -106,7 +111,19 @@ public:
 
 private:
 	void csc(std::ofstream &Scenariofile, const std::string type, unsigned int number); //Coord, staff, Capacity
+	std::map<unsigned int, std::tuple<std::pair<int, int >, unsigned int, unsigned int, unsigned int>> cscImport(std::string text, std::ifstream& Scenariofile, unsigned int& amount);
+	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int, int, Matrix<int>>> TransportNetImport(std::string text, std::string adjline, std::ifstream& Scenariofile, unsigned int& amount, Matrix<int>& adjency);
+	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int>> AirportImport(std::string text, std::ifstream& Scenariofile, unsigned int& amount);
+	
+	std::vector<unsigned int> Chunked_Data(std::string text, std::ifstream& Scenariofile, unsigned int amount, unsigned int& check_value);
+	std::vector<double> Chunked_Data(std::string, std::ifstream& Scenariofile, unsigned int amount, double& check_value);
 	int Input(std::string param);
+	
+	int SingleVar(std::string line, std::ifstream& Scenariofile, unsigned int &value);
+	double SingleVar(std::string line, std::ifstream& Scenariofile, double &value);
+	template<typename T>
+
+	bool CheckType(std::stringstream& input, T& check);
 
 public:
 	Scenario(const std::string &filename);

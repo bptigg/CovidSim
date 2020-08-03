@@ -13,7 +13,15 @@ int main()
 		log.Clear();
 		std::cout << log.GetCurrentTime() << std::endl;
 	}
+
+	Menu menu(0);
+	menu.DisplayMainMenu();
+
+	std::string input = "test.cvsn";
+	Scenario test(input);
+	test.ScenarioImport();
 	
+	/*
 	Matrix<int>* test = new Matrix<int>(2, 2);
 	test->PrintMat();
 	delete test;
@@ -27,6 +35,7 @@ int main()
 
 	Menu menu(0);
 	menu.DisplayMainMenu(); //here for test purposes
+	*/
 
 	/*
 	{
