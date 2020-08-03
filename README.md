@@ -1,5 +1,6 @@
 # CovidSim
 CovidSim, Is simple agent based model to try and replicate the spread of covid 19 when given a scenario. 
+A test Scenario is currently available to use
 
 Im designing CovidSim to not be realistic but to try and push myself to build a model for school project.
 
