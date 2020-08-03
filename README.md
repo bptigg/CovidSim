@@ -7,8 +7,8 @@ CovidSim isn't very fleshed out at the moment but will over time be expanded on.
 The main functionality of the model will come first but over time I will try to add more features.
 
 Features Currently present:
-    1)Scenario editor
-    2)Scenario Import
+    1) Scenario editor
+    2) Scenario Import
 
 Some functionality will include:
     1) Having a scenario editor
