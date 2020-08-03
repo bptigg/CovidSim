@@ -27,7 +27,8 @@ unsigned int Menu::DisplayMainMenu()
 		switch (m_Choice)
 		{
 		case 1:
-			std::cout << "Import Scenario not available" << std::endl;
+			//std::cout << "Import Scenario not available" << std::endl;
+			std::system("CLS");
 			CorrectMenuInput = true;
 			break;
 		case 2:

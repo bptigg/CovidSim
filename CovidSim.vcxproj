@@ -28,6 +28,8 @@
     <ClInclude Include="Source\Logging API.h" />
     <ClInclude Include="Source\Matrix.h" />
     <ClInclude Include="Source\Menu.h" />
+    <ClInclude Include="Source\Risk_Values.h" />
+    <ClInclude Include="Source\Setup_info.h" />
     <ClInclude Include="Source\Scenario.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

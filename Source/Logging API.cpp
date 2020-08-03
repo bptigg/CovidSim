@@ -10,10 +10,10 @@ Log::~Log()
 {
 	std::fstream LogFile;
 	LogFile.open("Logfile.txt", std::ios::out | std::ios::app);
+	LogFile << GetCurrentTime() << std::endl;
 
 	if (LogFile.is_open())
 	{
-		LogFile << GetCurrentTime() << std::endl;
 		for (auto elem : Recorded)
 		{
 			switch (elem.first.first)
@@ -94,3 +94,4 @@ std::string Log::GetCurrentTime()
 	ctime_s(str, sizeof str, &CT);
 	return str;
 }
+
