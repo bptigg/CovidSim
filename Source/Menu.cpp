@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include "Model.h"
 
 Menu::Menu(int Default)
 	:m_Choice(Default)
@@ -22,24 +23,24 @@ unsigned int Menu::DisplayMainMenu()
 		std::cout << "4). Quit " << std::endl;
 		std::cin >> m_Choice;
 
-		Scenario scenario;
-
 		switch (m_Choice)
 		{
 		case 1:
 			//std::cout << "Import Scenario not available" << std::endl;
 			std::system("CLS");
 			CorrectMenuInput = true;
+			Model::RunModel();
 			break;
 		case 2:
 			//std::cout << "Create Scenario not available" << std::endl;
 			CorrectMenuInput = true;
 			std::system("CLS");
-			scenario.ScenarioEditor();
+			Model::CreateModel();
 			break;
 		case 3:
 			std::cout << "Run Random Scenario not available" << std::endl;
 			CorrectMenuInput = true;
+			Model::RunRandomModel();
 			break;
 		case 4:
 			CorrectMenuInput = true;

@@ -2,24 +2,27 @@
 
 #include "Menu.h"
 #include "Logging API.h"
-#include "Scenario.h"
-#include "Matrix.h"
+//#include "Scenario.h"
+//#include "Matrix.h"
 
 
 int main()
 {
 	{
 		Log log(Log::LogLevelInfo);
-		log.Clear();
+		//log.Clear();
 		std::cout << log.GetCurrentTime() << std::endl;
 	}
 
-	Menu menu(0);
-	menu.DisplayMainMenu();
+	Menu main_menu(0);
+	main_menu.DisplayMainMenu();
 
-	std::string input = "test.cvsn";
-	Scenario test(input);
-	test.ScenarioImport();
+	//Menu menu(0);
+	//menu.DisplayMainMenu();
+
+	//std::string input = "test.cvsn";
+	//Scenario test(input);
+	//test.ScenarioImport();
 	
 	/*
 	Matrix<int>* test = new Matrix<int>(2, 2);

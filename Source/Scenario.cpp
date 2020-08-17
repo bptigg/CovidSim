@@ -13,7 +13,7 @@ Scenario::~Scenario()
 {
 }
 
-void Scenario::ScenarioImport()
+void Scenario::ScenarioImport(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child, Medical_data& adult, Scenario_Parameters& param, Social_Distance_poll& policies)
 {
 	std::ifstream ScenarioFile;
 	std::filesystem::path filepath = m_filepath;
@@ -64,8 +64,6 @@ void Scenario::ScenarioImport()
 	Num_airports = SingleVar("Number_of_airports", ScenarioFile, Num_airports);
 	Num_metro_stations = SingleVar("Number of Metro stations", ScenarioFile, Num_metro_stations);
 
-	/*make this a parameter*/World_Infomation infomation;
-
 	infomation.Primary_school = cscImport("Primary Schools", ScenarioFile, Num_of_Primary_Schools);
 	infomation.Secondry_school = cscImport("Secondry Schools", ScenarioFile, Num_of_Secondry_Schools);
 	infomation.University = cscImport("Universities", ScenarioFile, Num_of_Uni);
@@ -93,7 +91,6 @@ void Scenario::ScenarioImport()
 
 	population = SingleVar("Size_of_Population", ScenarioFile, population);
 	
-	/*make this a parameter*/ Population_Pyramid Population;
 	std::vector<unsigned int> Pop_Pyramid = Chunked_Data("Population_Pyramind_(%)", ScenarioFile, 5, int_check);
 	Population.zero_to_four = Pop_Pyramid[0];
 	Population.five_to_seventeen = Pop_Pyramid[1];
@@ -101,14 +98,12 @@ void Scenario::ScenarioImport()
 	Population.fifty_to_sixty_four = Pop_Pyramid[3];
 	Population.sixty_five_plus = Pop_Pyramid[4];
 
-	Population_race_data race_data;
 	std::vector<unsigned int> Race_data = Chunked_Data("Population_race_data (%)", ScenarioFile, 4, int_check);
 	race_data.white = Race_data[0];
 	race_data.black = Race_data[1];
 	race_data.hispanic = Race_data[2];
 	race_data.other = Race_data[3];
 
-	Medical_data child;
 	std::vector<double> child_medical = Chunked_Data("Child_medical_data (%)", ScenarioFile, 13, double_check);
 	child.Asthma = child_medical[0]; 
 	child.Auto_immune_disease = child_medical[1];
@@ -124,7 +119,6 @@ void Scenario::ScenarioImport()
 	child.other_disease = child_medical[11];
 	child.no_known_disease = child_medical[12];
 
-	Medical_data adult;
 	std::vector<double> adult_medical = Chunked_Data("Adult_medical_data (%)", ScenarioFile, 13, double_check);
 	adult.Asthma = adult_medical[0];
 	adult.Auto_immune_disease = adult_medical[1];
@@ -140,7 +134,6 @@ void Scenario::ScenarioImport()
 	adult.other_disease = adult_medical[11];
 	adult.no_known_disease = adult_medical[12];
 
-	Scenario_Parameters param;
 	std::vector<unsigned int> output = Chunked_Data("Output_Data", ScenarioFile, 9, int_check);
 	param.count = output[0];
 	param.R0 = output[1];
@@ -152,7 +145,6 @@ void Scenario::ScenarioImport()
 	param.mortality_rate = output[7];
 	param.morbidity_rate = output[8];
 
-	Social_Distance_poll policies;
 	std::vector<double> poll = Chunked_Data("Social_Distance_policies", ScenarioFile, 7, double_check);
 	policies.L1 = poll[0];
 	policies.L2 = poll[1];
@@ -175,6 +167,8 @@ void Scenario::ScenarioImport()
 		Log success(Log::LogLevelInfo);
 		success.LogFucntion(Log::LogLevelInfo, 3);
 	}
+
+	//CreateModel();
 }
 
 void Scenario::ScenarioEditor()
@@ -1292,8 +1286,9 @@ void Scenario::ScenarioCreate()
 	//This could be a feature, probably write after the main model. 
 }
 
-void Scenario::CreateModel()
+void Scenario::CreateModel(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child_medical, Medical_data& adult_medical, Scenario_Parameters& param, Social_Distance_poll& policy)
 {
+	
 	//Prety self explanitory 
 }
 

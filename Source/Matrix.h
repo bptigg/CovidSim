@@ -20,7 +20,7 @@ public:
 	Matrix(int rownum, int colnum)
 		: m_rowsize(rownum), m_colsize(colnum), m_size(rownum * colnum)
 	{
-		m_matrix.resize(rownum);
+		m_matrix.resize(m_rowsize);
 
 		for (int i = 0; i < m_matrix.size(); i++)
 		{
@@ -33,6 +33,19 @@ public:
 		m_matrix[rownum - 1][colnum - 1] = value;
 	}
 
+	void MatrixResize(int rownum, int colnum)
+	{
+		m_matrix.resize(rownum);
+
+		for (int i = 0; i < m_matrix.size(); i++)
+		{
+			m_matrix[i].resize(colnum);
+		}
+
+		m_rowsize = rownum;
+		m_colsize = colnum;
+		m_size = rownum * colnum;
+	}
 
 	std::vector<T> GetRow(int row)
 	{

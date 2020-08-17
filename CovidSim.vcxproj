@@ -22,12 +22,18 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Logging API.cpp" />
     <ClCompile Include="Source\Menu.cpp" />
+    <ClCompile Include="Source\Model.cpp" />
     <ClCompile Include="Source\Scenario.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Actor.h" />
+    <ClInclude Include="Source\Buildings.h" />
     <ClInclude Include="Source\Logging API.h" />
     <ClInclude Include="Source\Matrix.h" />
     <ClInclude Include="Source\Menu.h" />
+    <ClInclude Include="Source\Model.h" />
+    <ClInclude Include="Source\Public_Transport.h" />
+    <ClInclude Include="Source\Public_Transport_Network.h" />
     <ClInclude Include="Source\Risk_Values.h" />
     <ClInclude Include="Source\Setup_info.h" />
     <ClInclude Include="Source\Scenario.h" />
