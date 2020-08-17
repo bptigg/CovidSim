@@ -130,9 +130,10 @@ public:
 	Scenario();
 	~Scenario();
 
-	void ScenarioImport(); //Imports a scenario
+	void ScenarioImport(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child, Medical_data& adult, Scenario_Parameters& param, Social_Distance_poll& policies); //Imports a scenario
 	void ScenarioEditor(); //Allows you to create a scenario
 	void ScenarioCreate(); //Generates Scenario
-	void CreateModel();
+	
+	void CreateModel(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child_medical, Medical_data& adult_medical, Scenario_Parameters& param, Social_Distance_poll& policy);
 
 };
