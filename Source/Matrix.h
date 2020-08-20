@@ -121,7 +121,7 @@ public:
 			}
 			if (found)
 			{
-				for (int a = 0; a < amount; a++)
+				for (unsigned int a = 0; a < amount; a++)
 				{
 					getline(Scenariofile, row);
 					proxyrow << row;
