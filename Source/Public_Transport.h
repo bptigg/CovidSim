@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 
 #include "Actor.h"
 
@@ -19,7 +20,7 @@ private:
 	int m_y = 0;
 	unsigned int m_tile_num = 0;
 
-	unsigned int m_staff = 0;
+	unsigned int m_staff_amount = 0;
 
 	Type m_type = default_type;
 	Style m_style = default_style;

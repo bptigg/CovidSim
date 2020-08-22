@@ -232,7 +232,7 @@ void Scenario::ScenarioEditor()
 		ScenarioFile << "Unique_Buildings" << std::endl << "Public_Services" << std::endl << "Education_buildings" << std::endl;
 		csc(ScenarioFile, "Primary Schools", Num_of_Primary_Schools);
 		csc(ScenarioFile, "Secondry Schools", Num_of_Secondry_Schools);
-		csc(ScenarioFile, "Universities", Num_of_Uni);
+		csc(ScenarioFile, "Further Education", Num_of_Uni);
 		
 		ScenarioFile << std::endl << "Public_Services" << std::endl;
 		csc(ScenarioFile, "Hospitals", Num_of_Hospitals);

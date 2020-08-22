@@ -19,10 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Actor.cpp" />
     <ClCompile Include="Source\Application.cpp" />
+    <ClCompile Include="Source\Buildings.cpp" />
     <ClCompile Include="Source\Logging API.cpp" />
     <ClCompile Include="Source\Menu.cpp" />
     <ClCompile Include="Source\Model.cpp" />
+    <ClCompile Include="Source\Public_Transport.cpp" />
     <ClCompile Include="Source\Scenario.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -32,6 +35,7 @@
     <ClInclude Include="Source\Matrix.h" />
     <ClInclude Include="Source\Menu.h" />
     <ClInclude Include="Source\Model.h" />
+    <ClInclude Include="Source\Objects.h" />
     <ClInclude Include="Source\Public_Transport.h" />
     <ClInclude Include="Source\Public_Transport_Network.h" />
     <ClInclude Include="Source\Risk_Values.h" />

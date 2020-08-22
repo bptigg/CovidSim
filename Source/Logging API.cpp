@@ -8,36 +8,38 @@ Log::Log(LogLevel level)
 
 Log::~Log()
 {
-	std::fstream LogFile;
-	LogFile.open("Logfile.txt", std::ios::out | std::ios::app);
-	LogFile << GetCurrentTime() << std::endl;
-
-	if (LogFile.is_open())
+	if (Recorded.size() != 0)
 	{
-		for (auto elem : Recorded)
+		std::fstream LogFile;
+		LogFile.open("Logfile.txt", std::ios::out | std::ios::app);
+		LogFile << GetCurrentTime() << std::endl;
+
+		if (LogFile.is_open())
 		{
-			switch (elem.first.first)
+			for (auto elem : Recorded)
 			{
-			case 0:
-				LogFile << "[INFO]" << " " << "[" << elem.first.second << "] " << elem.second << std::endl;
-				break;
-			case 1:
-				LogFile << "[WARNING]" << " " << "[" << elem.first.second << "] " << elem.second << std::endl;
-				break;
-			case 2:
-				LogFile << "[ERROR]" << " " << "[" << elem.first.second << "] " << elem.second << std::endl;
-				break;
-			case 3:
-				LogFile << "[CRTICAL ERROR]" << " " << "[" << elem.first.second << "] " << elem.second << std::endl;
-				break;
-			default:
-				LogFile << "[CRITICAL ERROR]" << "Seems we have a bit of an error here, don't worry it will be fixed soon" << std::endl;
-				break;
+				switch (elem.first.first)
+				{
+				case 0:
+					LogFile << "[INFO]" << " " << "[" << elem.first.second << "] " << elem.second << std::endl;
+					break;
+				case 1:
+					LogFile << "[WARNING]" << " " << "[" << elem.first.second << "] " << elem.second << std::endl;
+					break;
+				case 2:
+					LogFile << "[ERROR]" << " " << "[" << elem.first.second << "] " << elem.second << std::endl;
+					break;
+				case 3:
+					LogFile << "[CRTICAL ERROR]" << " " << "[" << elem.first.second << "] " << elem.second << std::endl;
+					break;
+				default:
+					LogFile << "[CRITICAL ERROR]" << "Seems we have a bit of an error here, don't worry it will be fixed soon" << std::endl;
+					break;
+				}
 			}
 		}
+		LogFile.close();
 	}
-
-	LogFile.close();
 }
 
 void Log::LogFucntion(LogLevel level, unsigned int ErrorNumber)
