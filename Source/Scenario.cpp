@@ -1286,9 +1286,9 @@ void Scenario::ScenarioCreate()
 	//This could be a feature, probably write after the main model. 
 }
 
-void Scenario::CreateModel(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child_medical, Medical_data& adult_medical, Scenario_Parameters& param, Social_Distance_poll& policy)
+void Scenario::CreateModel(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child_medical, Medical_data& adult_medical, Scenario_Parameters& param, Social_Distance_poll& policy, Actor [], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size)
 {
-	
+	std::cin.get();
 	//Prety self explanitory 
 }
 
