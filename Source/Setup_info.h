@@ -5,6 +5,8 @@
 
 #include "Matrix.h"
 
+#include "Objects.h"
+
 struct World_Infomation
 {
 	/*Building positions*/
@@ -27,6 +29,15 @@ struct World_Infomation
 	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int, int, Matrix<int>>> TrainNet;
 	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int, int, Matrix<int>>> MetroNet;
 	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int>> Airport;
+};
+
+struct Tile
+{
+	std::vector<Education_Buildings*> edu_buildings;
+	std::vector<Public_Buildings*> Pub_buildings;
+	std::vector<Public_transport_building*> public_transport;
+
+	std::vector<Actor*> entity_currently_on_tile;
 };
 
 /* Turns out everything else I need is in scenario.h so no point making more variables for variables that already exist*/

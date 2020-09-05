@@ -1,7 +1,9 @@
 #include <iostream>
 
+
 #include "Menu.h"
 #include "Logging API.h"
+#include "Random.h"
 //#include "Scenario.h"
 //#include "Matrix.h"
 

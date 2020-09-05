@@ -134,6 +134,6 @@ public:
 	void ScenarioEditor(); //Allows you to create a scenario
 	void ScenarioCreate(); //Generates Scenario
 	
-	void CreateModel(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child_medical, Medical_data& adult_medical, Scenario_Parameters& param, Social_Distance_poll& policy);
+	void CreateModel(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child_medical, Medical_data& adult_medical, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population [], unsigned int& Actor_size, Education_Buildings primary_school [], unsigned int& primary_size);
 
 };
