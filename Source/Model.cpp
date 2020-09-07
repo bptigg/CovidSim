@@ -37,7 +37,7 @@ void Model::RunModel()
 	Public_transport_building* Airport = new Public_transport_building[RunModel.Num_airports];
 	Public_transport_building* Metro = new Public_transport_building[RunModel.Num_metro_stations];
 
-	RunModel.CreateModel(Infomation, Population_spread, Population_diversity, child_medical, adult_medical, scenario_param, policies, actor, RunModel.population, primary_school, RunModel.Num_of_Primary_Schools);
+	RunModel.CreateModel(Infomation, Population_spread, Population_diversity, child_medical, adult_medical, scenario_param, policies, actor, RunModel.population, primary_school, RunModel.Num_of_Primary_Schools, secondry_school, RunModel.Num_of_Secondry_Schools, further_education, RunModel.Num_of_Uni, Hospital, RunModel.Num_of_Hospitals, POW, RunModel.Num_of_POWs, Restuarant, RunModel.Num_of_Restuarants, Cinema, RunModel.Num_of_Cinemas, Shopping_center, RunModel.Num_of_Shopping_Centers, Parks, RunModel.Num_of_Parks, Bus, RunModel.Num_Bus_Stops, Train, RunModel.Num_Train_stations, Airport, RunModel.Num_airports, Metro, RunModel.Num_metro_stations);
 
 	std::cin.get();
 }
