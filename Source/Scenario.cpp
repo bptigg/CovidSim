@@ -1286,9 +1286,67 @@ void Scenario::ScenarioCreate()
 	//This could be a feature, probably write after the main model. 
 }
 
-void Scenario::CreateModel(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child_medical, Medical_data& adult_medical, Scenario_Parameters& param, Social_Distance_poll& policy, Actor [], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size)
+void Scenario::CreateModel(World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values , Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size)
 {
+	std::vector<unsigned int> population_age_weights = { *&Population_data.zero_to_four, *&Population_data.five_to_seventeen, *&Population_data.eighteen_to_fourty_nine, *&Population_data.fifty_to_sixty_four, *&Population_data.sixty_five_plus };
+	std::vector<unsigned int> population_race_weights = { *&race_data_values.white, *&race_data_values.black,*&race_data_values.hispanic,*&race_data_values .other };
+	std::vector<double> population_child_medical = { *&child_medical_data.Asthma, *&child_medical_data.Auto_immune_disease, *&child_medical_data.Cardiovascular_disease, *&child_medical_data.chronic_lung_disease, *&child_medical_data.Gastrointestinal_liver_disease, *&child_medical_data.Hypertension, *&child_medical_data.Hypertension, *&child_medical_data.Immune_disease, *&child_medical_data.Metabolic_disease, *&child_medical_data.Neurological_disease, *&child_medical_data.no_known_disease, *&child_medical_data.Obesity, *&child_medical_data.other_disease, *&child_medical_data.Renal_disease };
+	std::vector<double> population_adult_medical = { *&adult_medical_data.Asthma, *&adult_medical_data.Auto_immune_disease, *&adult_medical_data.Cardiovascular_disease, *&adult_medical_data.chronic_lung_disease, *&adult_medical_data.Gastrointestinal_liver_disease, *&adult_medical_data.Hypertension, *&adult_medical_data.Hypertension, *&adult_medical_data.Immune_disease, *&adult_medical_data.Metabolic_disease, *&adult_medical_data.Neurological_disease, *&adult_medical_data.no_known_disease, *&adult_medical_data.Obesity, *&adult_medical_data.other_disease, *&adult_medical_data.Renal_disease };
+
+	std::vector<unsigned int> population_age;
+	std::vector<unsigned int> population_race;
+	std::vector<unsigned int> medical_child;
+	std::vector<unsigned int> medical_adult;
+
+	//fix this linking issue at some point
+	population_age = Random::Discrete_distribution(population_age_weights, Actor_size);
+	population_race = Random::Discrete_distribution(population_race_weights, Actor_size);
+
+	unsigned int num_of_children = 0;
+	for (auto value : population_age)
+	{
+		if (value == 0 || value == 1 )
+		{
+			num_of_children++;
+		}
+	}
+
+	medical_child = Random::Discrete_distribution(population_child_medical, num_of_children);
+	medical_adult = Random::Discrete_distribution(population_adult_medical, (Actor_size - num_of_children));
+
+	for (unsigned int i = 0; i < Actor_size; i++)
+	{
+		/*DO risk calculations*/
+		switch (population_age[i])
+		{
+		case 0:
+			population_list[i].Age(Actor::zero_to_four);
+			break;
+		case 1:
+			population_list[i].Age(Actor::five_to_seventeen);
+			break;
+		case 2:
+			population_list[i].Age(Actor::eighteen_to_fortynine);
+			break;
+		case 3:
+			population_list[i].Age(Actor::fifty_to_sixtyfour);
+			break;
+		case 4:
+			population_list[i].Age(Actor::sixtyfive_plus);
+			break;
+		default:
+			break;
+		}
+	}
+
 	std::cin.get();
-	//Prety self explanitory 
+	
+
+	std::cin.get();
+	
 }
+
+
+
+
 

@@ -9,10 +9,13 @@
 
 #include <string>
 #include <map>
-#include <any>
 #include "Matrix.h"
 
 #include "Setup_info.h"
+#include "Random.h"
+
+#include "Buildings.h"
+#include "Public_Transport_Network.h"
 
 #include "Logging API.h"
 
@@ -125,6 +128,7 @@ private:
 
 	bool CheckType(std::stringstream& input, T& check);
 
+
 public:
 	Scenario(const std::string &filename);
 	Scenario();
@@ -134,6 +138,6 @@ public:
 	void ScenarioEditor(); //Allows you to create a scenario
 	void ScenarioCreate(); //Generates Scenario
 	
-	void CreateModel(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child_medical, Medical_data& adult_medical, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population [], unsigned int& Actor_size, Education_Buildings primary_school [], unsigned int& primary_size);
-
+	void CreateModel(World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values, Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size);
+	
 };

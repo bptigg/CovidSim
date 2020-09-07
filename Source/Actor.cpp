@@ -36,6 +36,11 @@ void Actor::Calc_mortality()
 {
 }
 
+void Actor::Age(Age_Catagory age)
+{
+	m_age_range = age;
+}
+
 void Actor::random_walk()
 {
 }
@@ -63,3 +68,4 @@ void Actor::House_Location()
 void Actor::Work_Location()
 {
 }
+

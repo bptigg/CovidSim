@@ -21,6 +21,9 @@
     <ClCompile Include="Source\Logging API.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Scenario.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -39,15 +42,15 @@
     <ClCompile Include="Source\Public_Transport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Random.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Logging API.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Scenario.h">
@@ -78,9 +81,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Objects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Random.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -81,4 +81,6 @@ public:
 	void House_Location();
 	void Work_Location();
 
+	void Age(Age_Catagory age);
+
 };
