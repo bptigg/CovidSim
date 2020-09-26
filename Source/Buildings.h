@@ -20,9 +20,15 @@ public:
 
 	std::tuple<int, int, unsigned int> Get_Location();
 	void Get_people_currently_in_buildling();
+
+	void set_location(int x, int y, unsigned int tile_num);
+
+	virtual void set_type();
+	virtual void set_staff();
+	virtual void set_capacity();
 };
 
-class Public_Buildings : Buildings
+class Public_Buildings : public Buildings
 {
 public:
 	enum Type
@@ -40,9 +46,13 @@ public:
 	Type Get_Type();
 	unsigned int Get_num_staff();
 	unsigned int Get_capacity();
+
+	void set_type(Type type);
+	void set_staff(unsigned int& staff_amount);
+	void set_capacity(unsigned int& capacity_amount);
 };
 
-class Education_Buildings : Buildings
+class Education_Buildings : public Buildings
 {
 public:
 	enum edu_type
@@ -62,9 +72,13 @@ public:
 
 	std::vector<Actor*> Get_students();
 	std::vector<Actor*> Get_staff();
+
+	void set_type(edu_type type);
+	void set_staff(unsigned int& staff_amount);
+	void set_capacity(unsigned int& capacity_amount);
 };
 
-class House : Buildings
+class House : public Buildings
 {
 private:
 	std::vector<Actor*> occupants;
@@ -75,7 +89,7 @@ public:
 	std::vector<Actor*> Get_occupants();
 };
 
-class Generic_work : Buildings
+class Generic_work : public Buildings
 {
 private:
 	std::vector <Actor*> employees;

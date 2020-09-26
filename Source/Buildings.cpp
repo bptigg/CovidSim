@@ -8,7 +8,24 @@ Buildings::~Buildings()
 {
 }
 
+void Buildings::set_type()
+{
+}
 
+void Buildings::set_staff()
+{
+}
+
+void Buildings::set_capacity()
+{
+}
+
+void Buildings::set_location(int x, int y, unsigned int tile_num)
+{
+	m_x = x;
+	m_y = y;
+	m_tilenum = tile_num;
+}
 
 std::tuple<int, int, unsigned int> Buildings::Get_Location()
 {
@@ -17,6 +34,37 @@ std::tuple<int, int, unsigned int> Buildings::Get_Location()
 
 void Buildings::Get_people_currently_in_buildling()
 {
+}
+
+
+void Public_Buildings::set_type(Public_Buildings::Type type)
+{
+	m_type = type;
+}
+
+void Public_Buildings::set_staff(unsigned int& staff_amount)
+{
+	m_staff = staff_amount;
+}
+
+void Public_Buildings::set_capacity(unsigned int& capacity_amount)
+{
+	m_capacity = capacity_amount;
+}
+
+void Education_Buildings::set_type(Education_Buildings::edu_type type)
+{
+	m_type = type;
+}
+
+void Education_Buildings::set_staff(unsigned int& staff_amount)
+{
+	m_staff = staff_amount;
+}
+
+void Education_Buildings::set_capacity(unsigned int& capacity_amount)
+{
+	m_capacity = capacity_amount;
 }
 
 Public_Buildings::Public_Buildings()
