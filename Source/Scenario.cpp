@@ -13,7 +13,7 @@ Scenario::~Scenario()
 {
 }
 
-void Scenario::ScenarioImport(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child, Medical_data& adult, Scenario_Parameters& param, Social_Distance_poll& policies)
+int Scenario::ScenarioImport(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child, Medical_data& adult, Scenario_Parameters& param, Social_Distance_poll& policies)
 {
 	std::ifstream ScenarioFile;
 	std::filesystem::path filepath = m_filepath;
@@ -41,7 +41,7 @@ void Scenario::ScenarioImport(World_Infomation& infomation, Population_Pyramid& 
 		std::cout << "File not Found" << std::endl;
 		{
 			logScenario.LogFucntion(Log::LogLevelCriticalError, 1);
-			return;
+			return 0;
 		}
 	}
 
@@ -159,16 +159,17 @@ void Scenario::ScenarioImport(World_Infomation& infomation, Population_Pyramid& 
 		std::cout << "File read incorrectly" << std::endl;
 		Log error(Log::LogLevelCriticalError);
 		error.LogFucntion(Log::LogLevelCriticalError, 4);
-		return;
+		return 0;
 	}
 	else
 	{
 		std::cout << "File read correctly" << std::endl;
 		Log success(Log::LogLevelInfo);
 		success.LogFucntion(Log::LogLevelInfo, 3);
+		return 1;
 	}
 
-	//CreateModel();
+
 }
 
 void Scenario::ScenarioEditor()
@@ -1286,10 +1287,31 @@ void Scenario::ScenarioCreate()
 	//This could be a feature, probably write after the main model. 
 }
 
-void Scenario::CreateModel(World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values , Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size)
+void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values , Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size)
 {
+	unsigned int i = 0;
+	for (auto elem : infomation_values.Primary_school)
+	{
+		primary_school[i].set_type(Education_Buildings::Primary_school);
+		auto [x_and_y, tile_number, staff, capacity] = elem.second;
+		primary_school[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		primary_school[i].set_staff(staff);
+		primary_school[i].set_capacity(capacity);
+
+		tile[tile_number - 1].edu_buildings.push_back(&primary_school[i]);
+		i++;
+
+		if (i == primary_size)
+		{
+			break;
+		}
+	}
+		//infom'ation_values.Primary_school
+		//need to write iterator to find the value but cba to do it at the moment.
+		//primary_school[i].Get_Location();
+
 	std::vector<unsigned int> population_age_weights = { *&Population_data.zero_to_four, *&Population_data.five_to_seventeen, *&Population_data.eighteen_to_fourty_nine, *&Population_data.fifty_to_sixty_four, *&Population_data.sixty_five_plus };
-	std::vector<unsigned int> population_race_weights = { *&race_data_values.white, *&race_data_values.black,*&race_data_values.hispanic,*&race_data_values .other };
+	std::vector<unsigned int> population_race_weights = { *&race_data_values.white, *&race_data_values.black,*&race_data_values.hispanic,*&race_data_values.other };
 	std::vector<double> population_child_medical = { *&child_medical_data.Asthma, *&child_medical_data.Auto_immune_disease, *&child_medical_data.Cardiovascular_disease, *&child_medical_data.chronic_lung_disease, *&child_medical_data.Gastrointestinal_liver_disease, *&child_medical_data.Hypertension, *&child_medical_data.Hypertension, *&child_medical_data.Immune_disease, *&child_medical_data.Metabolic_disease, *&child_medical_data.Neurological_disease, *&child_medical_data.no_known_disease, *&child_medical_data.Obesity, *&child_medical_data.other_disease, *&child_medical_data.Renal_disease };
 	std::vector<double> population_adult_medical = { *&adult_medical_data.Asthma, *&adult_medical_data.Auto_immune_disease, *&adult_medical_data.Cardiovascular_disease, *&adult_medical_data.chronic_lung_disease, *&adult_medical_data.Gastrointestinal_liver_disease, *&adult_medical_data.Hypertension, *&adult_medical_data.Hypertension, *&adult_medical_data.Immune_disease, *&adult_medical_data.Metabolic_disease, *&adult_medical_data.Neurological_disease, *&adult_medical_data.no_known_disease, *&adult_medical_data.Obesity, *&adult_medical_data.other_disease, *&adult_medical_data.Renal_disease };
 
