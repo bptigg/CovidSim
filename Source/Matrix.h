@@ -68,6 +68,16 @@ public:
 		return m_size;
 	}
 
+	int Get_num_col()
+	{
+		return m_colsize;
+	}
+
+	int Get_num_row()
+	{
+		return m_rowsize;
+	}
+
 	std::vector < std::vector<T> > GetMat()
 	{
 		return m_matrix;
@@ -137,8 +147,9 @@ public:
 						}
 					}
 				}
+				break;
 			}
-			break;
+			//break;
 		}
 	}
 };
