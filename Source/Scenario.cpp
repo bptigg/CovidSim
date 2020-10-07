@@ -1287,11 +1287,24 @@ void Scenario::ScenarioCreate()
 	//This could be a feature, probably write after the main model. 
 }
 
-void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values , Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size)
+void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values , Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size, Transport_Net& transport_network)
 {
+	Log createmodellog(Log::LogLevelInfo);
+	unsigned int errors = 0;
+
+	//could probably write this as a function but cba to do at the moment.
+
 	unsigned int i = 0;
 	for (auto elem : infomation_values.Primary_school)
 	{
+		if (i == primary_size && primary_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+
+		}
+
 		primary_school[i].set_type(Education_Buildings::Primary_school);
 		auto [x_and_y, tile_number, staff, capacity] = elem.second;
 		primary_school[i].set_location(x_and_y.first, x_and_y.second, tile_number);
@@ -1300,15 +1313,313 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 
 		tile[tile_number - 1].edu_buildings.push_back(&primary_school[i]);
 		i++;
+	}
 
-		if (i == primary_size)
+	i = 0;
+
+	for (auto elem : infomation_values.Secondry_school)
+	{
+		if (i == secondary_size && secondary_size != 0)
 		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
 			break;
 		}
+
+		secondary_school[i].set_type(Education_Buildings::Secondary_school);
+		auto [x_and_y, tile_number, staff, capacity] = elem.second;
+		secondary_school[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		secondary_school[i].set_staff(staff);
+		secondary_school[i].set_capacity(capacity);
+
+		tile[tile_number - 1].edu_buildings.push_back(&secondary_school[i]);
+		i++;
 	}
-		//infom'ation_values.Primary_school
-		//need to write iterator to find the value but cba to do it at the moment.
-		//primary_school[i].Get_Location();
+
+	i = 0;
+
+	for (auto elem : infomation_values.University)
+	{
+		if (i == further_size && further_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+
+		further_education[i].set_type(Education_Buildings::University);
+		auto [x_and_y, tile_number, staff, capacity] = elem.second;
+		further_education[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		further_education[i].set_staff(staff);
+		further_education[i].set_capacity(capacity);
+		
+		tile[tile_number - 1].edu_buildings.push_back(&further_education[i]);
+		i++;
+	}
+
+	i = 0;
+
+	for (auto elem : infomation_values.Hospital)
+	{
+		if (i == hospital_size && hospital_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+
+		hosptial[i].set_type(Public_Buildings::Hospital);
+		auto [x_and_y, tile_number, staff, capacity] = elem.second;
+		hosptial[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		hosptial[i].set_staff(staff);
+		hosptial[i].set_capacity(capacity);
+
+		tile[tile_number - 1].Pub_buildings.push_back(&hosptial[i]);
+		i++;
+	}
+
+	i = 0;
+
+	for (auto elem : infomation_values.POW)
+	{
+		if (i == pow_size && pow_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+
+		place_of_worship[i].set_type(Public_Buildings::Place_of_worship);
+		auto [x_and_y, tile_number, staff, capacity] = elem.second;
+		place_of_worship[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		place_of_worship[i].set_staff(staff);
+		place_of_worship[i].set_capacity(capacity);
+
+		tile[tile_number - 1].Pub_buildings.push_back(&hosptial[i]);
+		i++;
+	}
+
+	i = 0;
+
+	for (auto elem : infomation_values.Restuarant)
+	{
+		if (i == restaurant_size && restaurant_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+
+		Restaurant[i].set_type(Public_Buildings::restuarant);
+		auto [x_and_y, tile_number, staff, capacity] = elem.second;
+		Restaurant[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		Restaurant[i].set_staff(staff);
+		Restaurant[i].set_capacity(capacity);
+
+		tile[tile_number - 1].Pub_buildings.push_back(&Restaurant[i]);
+		i++;
+	}
+
+	i = 0;
+	
+	for (auto elem : infomation_values.Cinema)
+	{
+		if (i == cinema_size && cinema_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+		Cinema[i].set_type(Public_Buildings::cinema);
+		auto [x_and_y, tile_number, staff, capacity] = elem.second;
+		Cinema[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		Cinema[i].set_staff(staff);
+		Cinema[i].set_capacity(capacity);
+
+		tile[tile_number - 1].Pub_buildings.push_back(&Cinema[i]);
+		i++;
+	}
+
+	i = 0;
+
+	for (auto elem : infomation_values.Shopping_center)
+	{
+		if (i == center_size && center_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+		shopping_center[i].set_type(Public_Buildings::shopping_center);
+		auto [x_and_y, tile_number, staff, capacity] = elem.second;
+		shopping_center[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		shopping_center[i].set_staff(staff);
+		shopping_center[i].set_capacity(capacity);
+
+		tile[tile_number - 1].Pub_buildings.push_back(&shopping_center[i]);
+		i++;
+	}
+
+	i = 0;
+
+	for (auto elem : infomation_values.Park)
+	{
+		if (i == park_size && park_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+		parks[i].set_type(Public_Buildings::parks);
+		auto [x_and_y, tile_number, staff, capacity] = elem.second;
+		parks[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		parks[i].set_staff(staff);
+		parks[i].set_capacity(capacity);
+
+		tile[tile_number - 1].Pub_buildings.push_back(&shopping_center[i]);
+		i++;
+	}
+
+	for (auto elem : infomation_values.BusNet)
+	{
+		if (i == BusNet_size && BusNet_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+
+		BusNet[i].set_type(Public_transport_building::Bus);
+		auto [x_and_y, tile_number, staff, style, transport_matrix ] = elem.second;
+		BusNet[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		BusNet[i].set_style(style);
+		BusNet[i].set_staff(staff);
+
+		transport_network.Bus_Network.push_back(&BusNet[i]);
+		if (i+1 == BusNet_size)
+		{
+			transport_network.BusNetwork->MatrixResize(transport_matrix.Get_num_row(), transport_matrix.Get_num_col());
+
+			for (int a = 0; a < transport_matrix.Get_num_row(); a++)
+			{
+				std::vector<int> row = transport_matrix.GetRow(a+1);
+
+				for (int e = 0; e < transport_matrix.Get_num_col(); e++)
+				{
+					transport_network.BusNetwork->MatrixEdit(a+1, e+1, row[e]);
+				}
+			}
+		}
+
+		tile[tile_number - 1].public_transport.push_back(&BusNet[i]);
+		i++;
+	}
+
+	i = 0;
+
+	for (auto elem : infomation_values.TrainNet)
+	{
+		if (i == TrainNet_size && TrainNet_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+
+		TrainNet[i].set_type(Public_transport_building::Train);
+		auto [x_and_y, tile_number, staff, style, transport_matrix] = elem.second;
+		TrainNet[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		TrainNet[i].set_style(style);
+		TrainNet[i].set_staff(staff);
+
+		transport_network.Train_Network.push_back(&TrainNet[i]);
+		if (i + 1 == TrainNet_size)
+		{
+			transport_network.TrainNetwork->MatrixResize(transport_matrix.Get_num_row(), transport_matrix.Get_num_col());
+
+			for (int a = 0; a < transport_matrix.Get_num_row(); a++)
+			{
+				std::vector<int> row = transport_matrix.GetRow(a + 1);
+
+				for (int e = 0; e < transport_matrix.Get_num_col(); e++)
+				{
+					transport_network.TrainNetwork->MatrixEdit(a + 1, e + 1, row[e]);
+				}
+			}
+		}
+
+		tile[tile_number - 1].public_transport.push_back(&TrainNet[i]);
+		i++;
+	}
+
+	i = 0;
+
+	for (auto elem : infomation_values.MetroNet)
+	{
+		if (i == MetroNet_size && MetroNet_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+
+		MetroNet[i].set_type(Public_transport_building::Metro);
+		auto [x_and_y, tile_number, staff, style, transport_matrix] = elem.second;
+		MetroNet[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		MetroNet[i].set_style(style);
+		MetroNet[i].set_staff(staff);
+
+		transport_network.Metro_Network.push_back(&MetroNet[i]);
+		if (i + 1 == MetroNet_size)
+		{
+			transport_network.MetroNetwork->MatrixResize(transport_matrix.Get_num_row(), transport_matrix.Get_num_col());
+
+			for (int a = 0; a < transport_matrix.Get_num_row(); a++)
+			{
+				std::vector<int> row = transport_matrix.GetRow(a + 1);
+
+				for (int e = 0; e < transport_matrix.Get_num_col(); e++)
+				{
+					transport_network.MetroNetwork->MatrixEdit(a + 1, e + 1, row[e]);
+				}
+			}
+		}
+
+		tile[tile_number - 1].public_transport.push_back(&MetroNet[i]);
+		i++;
+	}
+
+	i = 0;
+
+	for (auto elem : infomation_values.Airport)
+	{
+		if (i == Air_size && Air_size != 0)
+		{
+			createmodellog.LogFucntion(Log::LogLevelCriticalError, 2);
+			errors++;
+			break;
+		}
+
+		Air[i].set_type(Public_transport_building::Airport);
+		auto [x_and_y, tile_number, staff] = elem.second;
+		Air[i].set_location(x_and_y.first, x_and_y.second, tile_number);
+		Air[i].set_staff(staff);
+
+		transport_network.Airports.push_back(&Air[i]);
+		tile[tile_number - 1].public_transport.push_back(&Air[i]);
+		i++;
+	}
+
+	if (errors == 0)
+	{
+		createmodellog.LogFucntion(Log::LogLevelInfo, 4);
+		std::cout << "WORLD BUILT SUCCESSFULLY" << std::endl;
+	}
+	else
+	{
+		createmodellog.LogFucntion(Log::LogLevelError, 3);
+		std::cout << "WORLD BUILT WITH SOME ERRORS HOWEVER MODEL WILL STILL RUN" << std::endl;
+	}
 
 	std::vector<unsigned int> population_age_weights = { *&Population_data.zero_to_four, *&Population_data.five_to_seventeen, *&Population_data.eighteen_to_fourty_nine, *&Population_data.fifty_to_sixty_four, *&Population_data.sixty_five_plus };
 	std::vector<unsigned int> population_race_weights = { *&race_data_values.white, *&race_data_values.black,*&race_data_values.hispanic,*&race_data_values.other };
@@ -1320,7 +1631,6 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 	std::vector<unsigned int> medical_child;
 	std::vector<unsigned int> medical_adult;
 
-	//fix this linking issue at some point
 	population_age = Random::Discrete_distribution(population_age_weights, Actor_size);
 	population_race = Random::Discrete_distribution(population_race_weights, Actor_size);
 

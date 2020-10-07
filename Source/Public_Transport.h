@@ -40,6 +40,11 @@ public:
 	void Get_Staff();
 
 	void Get_people_in_building();
+
+	void set_type(Type type);
+	void set_style(int style);
+	void set_location(int x, int y, unsigned int tilenum);
+	void set_staff(unsigned int staff);
 };
 
 
