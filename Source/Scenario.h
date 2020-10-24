@@ -6,6 +6,8 @@
 #include <filesystem>
 #include <stdlib.h>
 #include <utility>
+#include <cmath>
+#include <algorithm>
 
 #include <string>
 #include <map>
@@ -14,10 +16,13 @@
 #include "Setup_info.h"
 #include "Random.h"
 
+#include "Constants.h"
+
 #include "Buildings.h"
 #include "Public_Transport_Network.h"
 
 #include "Logging API.h"
+#include "calculations.h"
 
 class Scenario
 {
@@ -114,7 +119,7 @@ public:
 
 private:
 	void csc(std::ofstream &Scenariofile, const std::string type, unsigned int number); //Coord, staff, Capacity
-	std::map<unsigned int, std::tuple<std::pair<int, int >, unsigned int, unsigned int, unsigned int>> cscImport(std::string text, std::ifstream& Scenariofile, unsigned int& amount);
+	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int, unsigned int>> cscImport(std::string text, std::ifstream& Scenariofile, unsigned int& amount);
 	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int, int, Matrix<int>>> TransportNetImport(std::string text, std::string adjline, std::ifstream& Scenariofile, unsigned int& amount, Matrix<int>& adjency);
 	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int>> AirportImport(std::string text, std::ifstream& Scenariofile, unsigned int& amount);
 	
@@ -134,10 +139,17 @@ public:
 	Scenario();
 	~Scenario();
 
-	int ScenarioImport(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child, Medical_data& adult, Scenario_Parameters& param, Social_Distance_poll& policies); //Imports a scenario
+	bool ScenarioImport(World_Infomation& infomation, Population_Pyramid& Population, Population_race_data& race_data, Medical_data& child, Medical_data& adult, Scenario_Parameters& param, Social_Distance_poll& policies); //Imports a scenario
 	void ScenarioEditor(); //Allows you to create a scenario
 	void ScenarioCreate(); //Generates Scenario
 	
-	void CreateModel(Tile tile[], World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values, Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size, Transport_Net& transport_network);
+	void CreateModel(Tile tile[], World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values, Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size, Transport_Net& transport_network, std::vector<std::vector<Actor*>>& family_groups, std::vector<House*> houses, std::vector<Generic_work*> work_places);
 	
+	/*Setup functions*/
+	bool check_location(std::pair<unsigned int, unsigned int> location, Tile& tile);
+	unsigned int get_max_number_per_tile(unsigned int numtile, unsigned int houses_required);
+	void create_transport_matrix(Transport_Net& transport_network);
+	//bool assign_job(Actor& entity, Tile& tile);
+
 };
+

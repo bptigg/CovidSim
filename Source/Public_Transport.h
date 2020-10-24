@@ -32,12 +32,13 @@ public:
 	Public_transport_building();
 	~Public_transport_building();
 
-	void Get_Location();
+	std::tuple<int, int, unsigned int> Get_Location();
 	void Get_Node();
-	void Get_Type();
+	Type Get_Type();
 	
-	void Get_staff_num();
-	void Get_Staff();
+	unsigned int Get_staff_num();
+	std::vector<Actor*> Get_Staff();
+	void add_staff(Actor& staff);
 
 	void Get_people_in_building();
 

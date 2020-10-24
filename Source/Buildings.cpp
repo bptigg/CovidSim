@@ -29,7 +29,8 @@ void Buildings::set_location(int x, int y, unsigned int tile_num)
 
 std::tuple<int, int, unsigned int> Buildings::Get_Location()
 {
-	return std::tuple<int, int, unsigned int>();
+	std::tuple<int, int, unsigned int>loc = { m_x, m_y, m_tilenum };
+	return loc;
 }
 
 void Buildings::Get_people_currently_in_buildling()
@@ -52,6 +53,11 @@ void Public_Buildings::set_capacity(unsigned int& capacity_amount)
 	m_capacity = capacity_amount;
 }
 
+void Public_Buildings::add_staff(Actor& staff_member)
+{
+	staff.push_back(&staff_member);
+}
+
 void Education_Buildings::set_type(Education_Buildings::edu_type type)
 {
 	m_type = type;
@@ -65,6 +71,16 @@ void Education_Buildings::set_staff(unsigned int& staff_amount)
 void Education_Buildings::set_capacity(unsigned int& capacity_amount)
 {
 	m_capacity = capacity_amount;
+}
+
+void Education_Buildings::add_students(Actor& student)
+{
+	students.push_back(&student);
+}
+
+void Education_Buildings::add_Staff(Actor& staff_member)
+{
+	staff.push_back(&staff_member);
 }
 
 Public_Buildings::Public_Buildings()
@@ -82,12 +98,17 @@ Public_Buildings::Type Public_Buildings::Get_Type()
 
 unsigned int Public_Buildings::Get_num_staff()
 {
-	return 0;
+	return m_staff;
 }
 
 unsigned int Public_Buildings::Get_capacity()
 {
-	return 0;
+	return m_capacity;
+}
+
+std::vector<Actor*> Public_Buildings::Get_staff()
+{
+	return staff;
 }
 
 Education_Buildings::Education_Buildings()
@@ -100,15 +121,26 @@ Education_Buildings::~Education_Buildings()
 
 std::vector<Actor*> Education_Buildings::Get_students()
 {
-	return std::vector<Actor*>();
+	return students;
 }
 
 std::vector<Actor*> Education_Buildings::Get_staff()
 {
-	return std::vector<Actor*>();
+	return staff;
 }
 
-House::House()
+unsigned int Education_Buildings::get_student_amount()
+{
+	return (m_capacity - m_staff);
+}
+
+unsigned int Education_Buildings::get_staff_amount()
+{
+	return m_staff;
+}
+
+House::House(std::vector<Actor*> family)
+	:m_occupants(family)
 {
 }
 
@@ -131,5 +163,10 @@ Generic_work::~Generic_work()
 
 std::vector<Actor*> Generic_work::Get_employees()
 {
-	return std::vector<Actor*>();
+	return m_employees;
+}
+
+void Generic_work::add_employees(Actor& employee)
+{
+	m_employees.push_back(&employee);
 }

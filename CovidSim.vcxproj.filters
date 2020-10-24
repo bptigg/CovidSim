@@ -42,6 +42,12 @@
     <ClCompile Include="Source\Public_Transport.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\calculations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Constants.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Menu.h">
@@ -62,9 +68,6 @@
     <ClInclude Include="Source\Setup_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Risk_Values.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Model.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -81,6 +84,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Objects.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\calculations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

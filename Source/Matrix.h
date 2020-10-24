@@ -136,20 +136,42 @@ public:
 					getline(Scenariofile, row);
 					proxyrow << row;
 					int col = 0;
+					int gap = 0;
+					int val = 0;
+					int multiple = 0;
+					int characters = 0;
 					while (proxyrow.get(MatrixLine) && col < amount)
 					{
+						characters++;
 						if (MatrixLine != ' ')
 						{
-							int val = (int)MatrixLine - 48;
-
+							if (gap == 1)
+							{
+								val = 0;
+							}
+							
+							val = val * (10 * multiple) + ((int)MatrixLine - 48);
+							if (multiple == 0)
+							{
+								multiple = 1;
+							}
+							gap = 0;
+						}
+						if (MatrixLine == ' ' || characters == row.size())
+						{
+							gap = 1;;
 							MatrixEdit((a + 1), (col + 1), val);
+							multiple = 0;
 							col++;
 						}
 					}
+
+					proxyrow.str("");
+					proxyrow.clear();
+
 				}
 				break;
 			}
-			//break;
 		}
 	}
 };

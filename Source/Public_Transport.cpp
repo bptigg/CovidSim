@@ -8,24 +8,34 @@ Public_transport_building::~Public_transport_building()
 {
 }
 
-void Public_transport_building::Get_Location()
+std::tuple<int, int, unsigned int> Public_transport_building::Get_Location()
 {
+	std::tuple<int, int, unsigned int>loc = { m_x, m_y, m_tile_num};
+	return loc;
 }
 
 void Public_transport_building::Get_Node()
 {
 }
 
-void Public_transport_building::Get_Type()
+Public_transport_building::Type Public_transport_building::Get_Type()
 {
+	return m_type;
 }
 
-void Public_transport_building::Get_staff_num()
+unsigned int Public_transport_building::Get_staff_num()
 {
+	return m_staff_amount;
 }
 
-void Public_transport_building::Get_Staff()
+std::vector<Actor*> Public_transport_building::Get_Staff()
 {
+	return m_staff;
+}
+
+void Public_transport_building::add_staff(Actor& staff)
+{
+	m_staff.push_back(&staff);
 }
 
 void Public_transport_building::Get_people_in_building()

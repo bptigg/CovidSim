@@ -39,6 +39,8 @@ private:
 	Type m_type = default_type;
 	unsigned int m_staff = 0;
 	unsigned int m_capacity = 0;
+
+	std::vector<Actor*> staff;
 public:
 	Public_Buildings();
 	~Public_Buildings();
@@ -46,10 +48,13 @@ public:
 	Type Get_Type();
 	unsigned int Get_num_staff();
 	unsigned int Get_capacity();
+	std::vector<Actor*> Get_staff();
 
 	void set_type(Type type);
 	void set_staff(unsigned int& staff_amount);
 	void set_capacity(unsigned int& capacity_amount);
+
+	void add_staff(Actor& staff_member);
 };
 
 class Education_Buildings : public Buildings
@@ -69,21 +74,28 @@ private:
 public:
 	Education_Buildings();
 	~Education_Buildings();
-
+	
 	std::vector<Actor*> Get_students();
 	std::vector<Actor*> Get_staff();
+
+	unsigned int get_student_amount();
+	unsigned int get_staff_amount();
 
 	void set_type(edu_type type);
 	void set_staff(unsigned int& staff_amount);
 	void set_capacity(unsigned int& capacity_amount);
+
+	void add_students(Actor& student);
+	void add_Staff(Actor& staff);
 };
+
 
 class House : public Buildings
 {
 private:
-	std::vector<Actor*> occupants;
+	std::vector<Actor*> m_occupants;
 public:
-	House();
+	House(std::vector<Actor*> family);
 	~House();
 
 	std::vector<Actor*> Get_occupants();
@@ -92,9 +104,10 @@ public:
 class Generic_work : public Buildings
 {
 private:
-	std::vector <Actor*> employees;
+	std::vector <Actor*> m_employees;
 public:
 	Generic_work();
 	~Generic_work();
 	std::vector <Actor*> Get_employees();
+	void add_employees(Actor& employee);
 };
