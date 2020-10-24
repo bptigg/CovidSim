@@ -131,7 +131,7 @@ Public_Transport
 
 Bus Network
 Number of Bus stops/station
-2
+4
 Bus_stop 1
 Type
 0
@@ -148,14 +148,31 @@ Type
 1
 0
 
-Bus_Network_adjacency_matrix
-0 5 
-5 0 
+Bus_stop 3
+Type
+0
+2
+3
+3
+0
 
+Bus_stop 4
+Type
+0
+5
+6
+2
+0
+
+Bus_Network_adjacency_matrix
+0 5 6 9
+5 0 7 12
+6 7 0 6 
+9 12 6 0
 
 Train Network
 Number of Train stations
-2
+4
 Train_station 1
 Type
 0
@@ -172,9 +189,27 @@ Type
 9
 20
 
+Train_station 3
+Type
+0
+2
+3
+3
+20
+
+Train_station 4
+Type
+0
+5
+6
+2
+10
+
 Train_Network_adjacency_matrix
-0 10 
-10 0 
+0 10 5 15
+10 0 2 3
+5 2 0 10
+15 3 10 0
 
 Airports
 Number_of_airports
