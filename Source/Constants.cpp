@@ -37,3 +37,62 @@ double get_percentage_mild()
 {
 	return PERCENTAGE_MILD;
 }
+
+uint32_t INFECTION_DISTANCE = 2;
+uint32_t get_infection_distance()
+{
+	return INFECTION_DISTANCE;
+}
+
+uint32_t STARTING_INFECTED = 1;
+uint32_t get_starting_infected()
+{
+	return STARTING_INFECTED;
+}
+
+double ASYMPTOMATIC = 1;
+double MILD = 1;
+double FULL = 1;
+double get_modifier_value(int value)
+{
+	switch (value)
+	{
+	case 0:
+		return ASYMPTOMATIC;
+		break;
+	case 1:
+		return MILD;
+		break;
+	case 2:
+		return FULL;
+		break;
+	default:
+		return 1;
+		break;
+	}
+}
+
+uint32_t MAX_IDLE_TIME = 100; //counts are in minutes, This doesn't work if the actor is asleep
+uint32_t get_max_idle_time()
+{
+	return MAX_IDLE_TIME;
+}
+
+uint32_t MIN_IDLE_TIME = 10;
+uint32_t get_min_idle_time()
+{
+	return MIN_IDLE_TIME;
+}
+
+uint32_t COUNTS_PER_DAY = 86400;
+uint32_t get_counts_per_day()
+{
+	return COUNTS_PER_DAY;
+}
+
+double TIME_MODIFIER = 0.1;
+double get_time_modifier()
+{
+	return TIME_MODIFIER;
+}
+

@@ -43,3 +43,20 @@ std::vector<unsigned int> Random::Discrete_distribution(std::vector<double>& wei
 
 	return Results;
 }
+
+unsigned int Random::random_number(int min, int max, std::vector<unsigned int> used_numbers)
+{
+	std::default_random_engine gen;
+	std::uniform_int_distribution<int> random(min, max);
+	bool number_found = false;
+
+	while (number_found == false)
+	{
+		unsigned int random_number = random(gen);
+		if (std::find(used_numbers.begin(), used_numbers.end(), random_number) == used_numbers.end())
+		{
+			number_found = true;
+			return random_number;
+		}
+	}
+}

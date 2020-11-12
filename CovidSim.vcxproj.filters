@@ -62,13 +62,13 @@
     <ClInclude Include="Source\Scenario.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Matrix.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Setup_info.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Matrix.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Actor.h">

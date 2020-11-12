@@ -122,6 +122,7 @@ private:
 	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int, unsigned int>> cscImport(std::string text, std::ifstream& Scenariofile, unsigned int& amount);
 	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int, int, Matrix<int>>> TransportNetImport(std::string text, std::string adjline, std::ifstream& Scenariofile, unsigned int& amount, Matrix<int>& adjency);
 	std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int>> AirportImport(std::string text, std::ifstream& Scenariofile, unsigned int& amount);
+	void GetMatrix(std::ifstream& Scenariofile, std::string& text, unsigned int& amount, Matrix<int>& adjency);
 	
 	std::vector<unsigned int> Chunked_Data(std::string text, std::ifstream& Scenariofile, unsigned int amount, unsigned int& check_value);
 	std::vector<double> Chunked_Data(std::string, std::ifstream& Scenariofile, unsigned int amount, double& check_value);

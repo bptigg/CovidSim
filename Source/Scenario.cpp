@@ -233,7 +233,7 @@ void Scenario::ScenarioEditor()
 		ScenarioFile << "Unique_Buildings" << std::endl << "Public_Services" << std::endl << "Education_buildings" << std::endl;
 		csc(ScenarioFile, "Primary Schools", Num_of_Primary_Schools);
 		csc(ScenarioFile, "Secondry Schools", Num_of_Secondry_Schools);
-		csc(ScenarioFile, "Further Education", Num_of_Uni);
+		csc(ScenarioFile, "Universities", Num_of_Uni);
 		
 		ScenarioFile << std::endl << "Public_Services" << std::endl;
 		csc(ScenarioFile, "Hospitals", Num_of_Hospitals);
@@ -951,7 +951,6 @@ std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned in
 	return Transport;
 }
 
-
 std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned int, int, Matrix<int>>> Scenario::TransportNetImport(std::string text, std::string adjline, std::ifstream& Scenariofile, unsigned int& amount, Matrix<int>& adjency)
 {
 	Scenariofile.clear();
@@ -1053,7 +1052,7 @@ std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned in
 				proxy.str("");
 				proxy.clear();
 
-				adjency.GetMatrix(Scenariofile, adjline, amount);
+				GetMatrix(Scenariofile, adjline, amount, adjency);
 
 				std::pair<int, int> coord;
 				coord.first = x;
@@ -1075,6 +1074,69 @@ std::map<unsigned int, std::tuple<std::pair<int, int>, unsigned int, unsigned in
 	return Transport;
 }
 
+void Scenario::GetMatrix(std::ifstream& Scenariofile, std::string& text, unsigned int& amount, Matrix<int>& adjency)
+{
+	Scenariofile.clear();
+	Scenariofile.seekg(0, std::ios::beg);
+
+	std::string row;
+	std::stringstream proxyrow;
+
+	char MatrixLine;
+
+	bool found = false;
+
+	while (getline(Scenariofile, row))
+	{
+		if (row.find(text) != std::string::npos)
+		{
+			found = true;
+		}
+		if (found)
+		{
+			for (unsigned int a = 0; a < amount; a++)
+			{
+				getline(Scenariofile, row);
+				proxyrow << row;
+				int col = 0;
+				int gap = 0;
+				int val = 0;
+				int multiple = 0;
+				int characters = 0;
+				while (proxyrow.get(MatrixLine) && col < amount)
+				{
+					characters++;
+					if (MatrixLine != ' ')
+					{
+						if (gap == 1)
+						{
+							val = 0;
+						}
+
+						val = val * (10 * multiple) + ((int)MatrixLine - 48);
+						if (multiple == 0)
+						{
+							multiple = 1;
+						}
+						gap = 0;
+					}
+					if (MatrixLine == ' ' || characters == row.size())
+					{
+						gap = 1;;
+						adjency.MatrixEdit((a + 1), (col + 1), val);
+						multiple = 0;
+						col++;
+					}
+				}
+
+				proxyrow.str("");
+				proxyrow.clear();
+
+			}
+			break;
+		}
+	}
+}
 
 int Scenario::Input(std::string param)
 {
@@ -1935,6 +1997,47 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 	population_age = Random::Discrete_distribution(population_age_weights, Actor_size);
 	population_race = Random::Discrete_distribution(population_race_weights, Actor_size);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 	unsigned int num_of_children = 0;
 	for (auto value : population_age)
 	{
@@ -2067,6 +2170,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 
 	for (unsigned int i = 0; i < Actor_size; i++)
 	{
+		population_list[i].tile_size = tile_size;
 		/*DO risk calculations*/
 		switch (population_age[i])
 		{
@@ -2110,6 +2214,16 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			int e = 0;
 			while (place_found == false)
 			{
+				if (e >= secondary_size && e >= primary_size)
+				{
+					createmodellog.LogFucntion(Log::LogLevelWarning, 2);
+					if (message_printed == false)
+					{
+						std::cout << "MORE STUDENTS THAN SCHOOL PLACES MIGHT CAUSE ISSUES" << std::endl;
+						message_printed = true;
+					}
+					break;
+				}
 				if (primary_school[e].Get_students().size() != primary_school[e].get_student_amount())
 				{
 					primary_school[e].add_students(population_list[i]);
@@ -2128,16 +2242,6 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				{
 					e++;
 				}
-				if (e >= secondary_size && e >= primary_size)
-				{
-					createmodellog.LogFucntion(Log::LogLevelWarning, 2);
-					if (message_printed == false)
-					{
-						std::cout << "MORE STUDENTS THAN SCHOOL PLACES MIGHT CAUSE ISSUES" << std::endl;
-						message_printed = true;
-					}
-					break;
-				}
 			}
 		}
 		else if (population_list[i].Get_age() == Actor::eighteen_to_fortynine)
@@ -2146,6 +2250,11 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			int e = 0;
 			while (place_found == false)
 			{
+				if (e >= further_size)
+				{
+					job_applicable.push_back(&population_list[i]);
+					break;
+				}
 				if (further_education[e].Get_students().size() != further_education[e].get_student_amount())
 				{
 					further_education[e].add_students(population_list[i]);
@@ -2156,11 +2265,6 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				else
 				{
 					e++;
-				}
-				if (e >= further_size)
-				{
-					job_applicable.push_back(&population_list[i]);
-					break;
 				}
 			}
 		}
@@ -2273,6 +2377,14 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			}
 		}
 		job_applicable.clear();
+	}
+
+	for (int i = 0; i < Actor_size; i++)
+	{	
+		auto [x, y, tile] = population_list[i].House_Location();
+		population_list[i].set_location(x, y, tile);
+		population_list[i].set_location_state(Actor::home);
+		population_list[i].set_symptom_severity(symptom_severity[i]);
 	}
 
 	create_transport_matrix(transport_network);

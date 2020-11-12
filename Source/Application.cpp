@@ -4,6 +4,7 @@
 #include "Menu.h"
 #include "Logging API.h"
 #include "Random.h"
+//#include "Model.h"
 //#include "Scenario.h"
 //#include "Matrix.h"
 
@@ -15,6 +16,8 @@ int main()
 		//log.Clear();
 		std::cout << log.GetCurrentTime() << std::endl;
 	}
+
+	//functions::generate_circle(2, std::make_pair(0, 0));
 
 	Menu main_menu(0);
 	main_menu.DisplayMainMenu();

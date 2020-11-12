@@ -44,5 +44,3 @@ struct Tile
 
 	std::vector<Actor*> entity_currently_on_tile;
 };
-
-/* Turns out everything else I need is in scenario.h so no point making more variables for variables that already exist*/
