@@ -50,9 +50,9 @@ uint32_t get_starting_infected()
 	return STARTING_INFECTED;
 }
 
-double ASYMPTOMATIC = 1;
+double ASYMPTOMATIC = 0.75;
 double MILD = 1;
-double FULL = 1;
+double FULL = 1.25;
 double get_modifier_value(int value)
 {
 	switch (value)
@@ -78,7 +78,7 @@ uint32_t get_max_idle_time()
 	return MAX_IDLE_TIME;
 }
 
-uint32_t MIN_IDLE_TIME = 10;
+uint32_t MIN_IDLE_TIME = 50;
 uint32_t get_min_idle_time()
 {
 	return MIN_IDLE_TIME;
@@ -94,5 +94,35 @@ double TIME_MODIFIER = 0.1;
 double get_time_modifier()
 {
 	return TIME_MODIFIER;
+}
+
+unsigned int MAX_WALK = 1;
+unsigned int get_max_walk()
+{
+	return MAX_WALK;
+}
+
+double CHANCE = 0.15;
+double get_chance()
+{
+	return CHANCE;
+}
+
+uint32_t MIN_AYSMPTOMATIC_PERIOD = 10080;
+uint32_t get_min_period()
+{
+	return MIN_AYSMPTOMATIC_PERIOD;
+}
+
+uint32_t MAX_AYSMPTOMATIC_PERIOD = 20160;
+uint32_t get_max_period()
+{
+	return MAX_AYSMPTOMATIC_PERIOD;
+}
+
+uint32_t DAY_LENGTH = 1440;
+uint32_t get_day_length()
+{
+	return DAY_LENGTH;
 }
 

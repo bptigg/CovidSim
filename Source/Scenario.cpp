@@ -1638,7 +1638,7 @@ void Scenario::create_transport_matrix(Transport_Net& transport_network)
 }
 
 
-void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values, Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size, Transport_Net& transport_network, std::vector<std::vector<Actor*>>& family_groups, std::vector<House*> houses, std::vector<Generic_work*> work_places)
+void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Population_Pyramid& Population_data, Population_race_data& race_data_values, Medical_data& child_medical_data, Medical_data& adult_medical_data, Scenario_Parameters& param, Social_Distance_poll& policy, Actor population_list[], unsigned int& Actor_size, Education_Buildings primary_school[], unsigned int& primary_size, Education_Buildings secondary_school[], unsigned int& secondary_size, Education_Buildings further_education[], unsigned int& further_size, Public_Buildings hosptial[], unsigned int& hospital_size, Public_Buildings place_of_worship[], unsigned int& pow_size, Public_Buildings Restaurant[], unsigned int& restaurant_size, Public_Buildings Cinema[], unsigned int& cinema_size, Public_Buildings shopping_center[], unsigned int& center_size, Public_Buildings parks[], unsigned int& park_size, Public_transport_building BusNet[], unsigned int& BusNet_size, Public_transport_building TrainNet[], unsigned int& TrainNet_size, Public_transport_building Air[], unsigned int& Air_size, Public_transport_building MetroNet[], unsigned int& MetroNet_size, Transport_Net& transport_network, std::vector<std::vector<Actor*>>& family_groups, std::vector<House*>& houses, std::vector<Generic_work*>& work_places)
 {
 	Log createmodellog(Log::LogLevelInfo);
 	unsigned int errors = 0;
@@ -1668,7 +1668,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			primary_school[i].set_staff(staff);
 			primary_school[i].set_capacity(capacity);
 
-			tile[tile_number - 1].edu_buildings.push_back(&primary_school[i]);
+			tile[tile_number ].edu_buildings.push_back(&primary_school[i]);
 			i++;
 		}
 
@@ -1689,7 +1689,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			secondary_school[i].set_staff(staff);
 			secondary_school[i].set_capacity(capacity);
 
-			tile[tile_number - 1].edu_buildings.push_back(&secondary_school[i]);
+			tile[tile_number ].edu_buildings.push_back(&secondary_school[i]);
 			i++;
 		}
 
@@ -1710,7 +1710,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			further_education[i].set_staff(staff);
 			further_education[i].set_capacity(capacity);
 
-			tile[tile_number - 1].edu_buildings.push_back(&further_education[i]);
+			tile[tile_number ].edu_buildings.push_back(&further_education[i]);
 			i++;
 		}
 
@@ -1731,7 +1731,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			hosptial[i].set_staff(staff);
 			hosptial[i].set_capacity(capacity);
 
-			tile[tile_number - 1].Pub_buildings.push_back(&hosptial[i]);
+			tile[tile_number ].Pub_buildings.push_back(&hosptial[i]);
 			i++;
 		}
 
@@ -1752,7 +1752,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			place_of_worship[i].set_staff(staff);
 			place_of_worship[i].set_capacity(capacity);
 
-			tile[tile_number - 1].Pub_buildings.push_back(&hosptial[i]);
+			tile[tile_number ].Pub_buildings.push_back(&place_of_worship[i]);
 			i++;
 		}
 
@@ -1773,7 +1773,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			Restaurant[i].set_staff(staff);
 			Restaurant[i].set_capacity(capacity);
 
-			tile[tile_number - 1].Pub_buildings.push_back(&Restaurant[i]);
+			tile[tile_number ].Pub_buildings.push_back(&Restaurant[i]);
 			i++;
 		}
 
@@ -1793,7 +1793,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			Cinema[i].set_staff(staff);
 			Cinema[i].set_capacity(capacity);
 
-			tile[tile_number - 1].Pub_buildings.push_back(&Cinema[i]);
+			tile[tile_number ].Pub_buildings.push_back(&Cinema[i]);
 			i++;
 		}
 
@@ -1813,7 +1813,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			shopping_center[i].set_staff(staff);
 			shopping_center[i].set_capacity(capacity);
 
-			tile[tile_number - 1].Pub_buildings.push_back(&shopping_center[i]);
+			tile[tile_number].Pub_buildings.push_back(&shopping_center[i]);
 			i++;
 		}
 
@@ -1833,7 +1833,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			parks[i].set_staff(staff);
 			parks[i].set_capacity(capacity);
 
-			tile[tile_number - 1].Pub_buildings.push_back(&shopping_center[i]);
+			tile[tile_number].Pub_buildings.push_back(&parks[i]);
 			i++;
 		}
 
@@ -1870,7 +1870,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				}
 			}
 
-			tile[tile_number - 1].public_transport.push_back(&BusNet[i]);
+			tile[tile_number].public_transport.push_back(&BusNet[i]);
 			i++;
 		}
 
@@ -1907,7 +1907,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				}
 			}
 
-			tile[tile_number - 1].public_transport.push_back(&TrainNet[i]);
+			tile[tile_number].public_transport.push_back(&TrainNet[i]);
 			i++;
 		}
 
@@ -1944,7 +1944,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				}
 			}
 
-			tile[tile_number - 1].public_transport.push_back(&MetroNet[i]);
+			tile[tile_number].public_transport.push_back(&MetroNet[i]);
 			i++;
 		}
 
@@ -1965,7 +1965,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			Air[i].set_staff(staff);
 
 			transport_network.Airports.push_back(&Air[i]);
-			tile[tile_number - 1].public_transport.push_back(&Air[i]);
+			tile[tile_number].public_transport.push_back(&Air[i]);
 			i++;
 		}
 
@@ -1996,47 +1996,6 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 
 	population_age = Random::Discrete_distribution(population_age_weights, Actor_size);
 	population_race = Random::Discrete_distribution(population_race_weights, Actor_size);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 	unsigned int num_of_children = 0;
 	for (auto value : population_age)
@@ -2146,6 +2105,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 					for (auto actor : family_groups[houses_built + i])
 					{
 						actor->set_home_location(home->Get_Location());
+						home->add_people_buiding(actor);
 					}
 					houses.push_back(home);
 					tile[tilenumber].Houses.push_back(home);
@@ -2176,27 +2136,27 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 		{
 		case 0:
 			population_list[i].Age(Actor::zero_to_four);
-			population_list[i].set_host_risk(calculations::calc_susceptibility(Actor::zero_to_four, medical_child[medical_child_value], population_race[i]));
+			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::zero_to_four, medical_child[medical_child_value], population_race[i]));
 			medical_child_value++;
 			break;
 		case 1:
 			population_list[i].Age(Actor::five_to_seventeen);
-			population_list[i].set_host_risk(calculations::calc_susceptibility(Actor::five_to_seventeen, medical_child[medical_child_value], population_race[i]));
+			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::five_to_seventeen, medical_child[medical_child_value], population_race[i]));
 			medical_child_value++;
 			break;
 		case 2:
 			population_list[i].Age(Actor::eighteen_to_fortynine);
-			population_list[i].set_host_risk(calculations::calc_susceptibility(Actor::eighteen_to_fortynine, medical_adult[medical_adult_value], population_race[i]));
+			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::eighteen_to_fortynine, medical_adult[medical_adult_value], population_race[i]));
 			medical_adult_value++;
 			break;
 		case 3:
 			population_list[i].Age(Actor::fifty_to_sixtyfour);
-			population_list[i].set_host_risk(calculations::calc_susceptibility(Actor::fifty_to_sixtyfour, medical_adult[medical_adult_value], population_race[i]));
+			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::fifty_to_sixtyfour, medical_adult[medical_adult_value], population_race[i]));
 			medical_adult_value++;
 			break;
 		case 4:
 			population_list[i].Age(Actor::sixtyfive_plus);
-			population_list[i].set_host_risk(calculations::calc_susceptibility(Actor::sixtyfive_plus, medical_adult[medical_adult_value], population_race[i]));
+			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::sixtyfive_plus, medical_adult[medical_adult_value], population_race[i]));
 			medical_adult_value++;
 			break;
 		default:

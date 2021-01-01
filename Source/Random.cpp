@@ -8,6 +8,18 @@ std::vector<unsigned int> Random::Discrete_distribution(std::vector<unsigned int
 	std::string time = get_time.GetCurrentTime();
 	std::seed_seq stime (time.begin(), time.end());
 	
+	for (auto num : weights)
+	{
+		if (num < 0 || num > 1)
+		{
+			weights.clear();
+			for (int i = 0; i < weights.size(); i++)
+			{
+				weights.push_back(0.25);
+			}
+			break;
+		}
+	}
 
 	std::discrete_distribution<int> dist(std::begin(weights), std::end(weights));
 	std::mt19937 gen;
@@ -30,6 +42,18 @@ std::vector<unsigned int> Random::Discrete_distribution(std::vector<double>& wei
 	std::string time = get_time.GetCurrentTime();
 	std::seed_seq stime(time.begin(), time.end());
 
+	for (auto num : weights)
+	{
+		if (num < 0 || num > 1)
+		{
+			weights.clear();
+			for (int i = 0; i < weights.size(); i++)
+			{
+				weights.push_back(0.25);
+			}
+			break;
+		}
+	}
 
 	std::discrete_distribution<int> dist(std::begin(weights), std::end(weights));
 	std::mt19937 gen;

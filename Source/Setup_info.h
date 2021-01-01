@@ -33,6 +33,18 @@ struct World_Infomation
 
 struct Tile
 {
+	~Tile()
+	{
+		edu_buildings.clear();
+		Pub_buildings.clear();
+		public_transport.clear();
+
+		Houses.clear();
+		Generic_work.clear();
+
+		entity_currently_on_tile.clear();
+	}
+
 	uint32_t size = 0;
 
 	std::vector<Education_Buildings*> edu_buildings;
@@ -43,4 +55,5 @@ struct Tile
 	std::vector<Generic_work*> Generic_work;
 
 	std::vector<Actor*> entity_currently_on_tile;
+
 };

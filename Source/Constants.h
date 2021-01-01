@@ -22,6 +22,12 @@ uint32_t get_counts_per_day();
 
 double get_time_modifier();
 
+unsigned int get_max_walk();
+
+double get_chance();
+
+uint32_t get_min_period();
+uint32_t get_max_period();
+uint32_t get_day_length();
 
 
-/*Everything in this headfile will be a constant variable will actually make this file at somepoint just not now*/
