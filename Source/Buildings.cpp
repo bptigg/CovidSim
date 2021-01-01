@@ -1,11 +1,8 @@
 #include "Buildings.h"
 
-Buildings::Buildings()
-{
-}
-
 Buildings::~Buildings()
 {
+	Currently_in_building.clear();
 }
 
 void Buildings::set_type()
@@ -18,6 +15,23 @@ void Buildings::set_staff()
 
 void Buildings::set_capacity()
 {
+}
+
+void Buildings::add_people_buiding(Actor* entity)
+{
+	Currently_in_building.push_back(entity);
+}
+
+void Buildings::remove_people_building(Actor* entity)
+{
+	for (int position = 0; position < Currently_in_building.size(); position++)
+	{
+		if (Currently_in_building[position] == entity)
+		{
+			Currently_in_building.erase(Currently_in_building.begin() + position);
+			break;
+		}
+	}
 }
 
 void Buildings::set_location(int x, int y, unsigned int tile_num)
@@ -33,8 +47,9 @@ std::tuple<int, int, unsigned int> Buildings::Get_Location()
 	return loc;
 }
 
-void Buildings::Get_people_currently_in_buildling()
+std::vector<Actor*> Buildings::Get_people_currently_in_buildling()
 {
+	return Currently_in_building;
 }
 
 
@@ -89,11 +104,13 @@ Public_Buildings::Public_Buildings()
 
 Public_Buildings::~Public_Buildings()
 {
+	staff.clear();
+	patients.clear();
 }
 
 Public_Buildings::Type Public_Buildings::Get_Type()
 {
-	return Type();
+	return m_type;
 }
 
 unsigned int Public_Buildings::Get_num_staff()
@@ -117,6 +134,8 @@ Education_Buildings::Education_Buildings()
 
 Education_Buildings::~Education_Buildings()
 {
+	students.clear();
+	staff.clear();
 }
 
 std::vector<Actor*> Education_Buildings::Get_students()
@@ -144,8 +163,13 @@ House::House(std::vector<Actor*> family)
 {
 }
 
+House::House()
+{
+}
+
 House::~House()
 {
+	m_occupants.clear();
 }
 
 std::vector<Actor*> House::Get_occupants()
@@ -159,6 +183,7 @@ Generic_work::Generic_work()
 
 Generic_work::~Generic_work()
 {
+	m_employees.clear();
 }
 
 std::vector<Actor*> Generic_work::Get_employees()

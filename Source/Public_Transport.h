@@ -3,6 +3,8 @@
 
 #include "Actor.h"
 
+class Actor;
+
 class Public_transport_building
 {
 public:
@@ -40,12 +42,14 @@ public:
 	std::vector<Actor*> Get_Staff();
 	void add_staff(Actor& staff);
 
-	void Get_people_in_building();
+	std::vector<Actor*> Get_people_currently_in_building();
 
 	void set_type(Type type);
 	void set_style(int style);
 	void set_location(int x, int y, unsigned int tilenum);
 	void set_staff(unsigned int staff);
+	void add_people_buiding(Actor* entity);
+	void remove_people_building(Actor* entity);
 };
 
 

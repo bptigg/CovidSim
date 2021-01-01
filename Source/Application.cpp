@@ -13,7 +13,7 @@ int main()
 {
 	{
 		Log log(Log::LogLevelInfo);
-		//log.Clear();
+		log.Clear();
 		std::cout << log.GetCurrentTime() << std::endl;
 	}
 

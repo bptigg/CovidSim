@@ -23,6 +23,7 @@
     <ClCompile Include="Source\Application.cpp" />
     <ClCompile Include="Source\Buildings.cpp" />
     <ClCompile Include="Source\calculations.cpp" />
+    <ClCompile Include="Source\Director.cpp" />
     <ClCompile Include="Source\Logging API.cpp" />
     <ClCompile Include="Source\Menu.cpp" />
     <ClCompile Include="Source\Model.cpp" />
@@ -35,6 +36,7 @@
     <ClInclude Include="Source\Actor.h" />
     <ClInclude Include="Source\Buildings.h" />
     <ClInclude Include="Source\calculations.h" />
+    <ClInclude Include="Source\Director.h" />
     <ClInclude Include="Source\Logging API.h" />
     <ClInclude Include="Source\Matrix.h" />
     <ClInclude Include="Source\Menu.h" />
@@ -46,6 +48,7 @@
     <ClInclude Include="Source\Constants.h" />
     <ClInclude Include="Source\Setup_info.h" />
     <ClInclude Include="Source\Scenario.h" />
+    <ClInclude Include="Source\Tasks.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

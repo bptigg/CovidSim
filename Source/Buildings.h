@@ -15,17 +15,18 @@ private:
 	std::vector<Actor*> Currently_in_building = {};
 
 public:
-	Buildings();
 	~Buildings();
 
 	std::tuple<int, int, unsigned int> Get_Location();
-	void Get_people_currently_in_buildling();
+	std::vector<Actor*> Get_people_currently_in_buildling();
 
 	void set_location(int x, int y, unsigned int tile_num);
 
 	virtual void set_type();
 	virtual void set_staff();
 	virtual void set_capacity();
+	void add_people_buiding(Actor* entity);
+	void remove_people_building(Actor* entity);
 };
 
 class Public_Buildings : public Buildings
@@ -35,6 +36,8 @@ public:
 	{
 		Hospital = 0, Place_of_worship, restuarant, cinema, shopping_center, parks, default_type
 	};
+
+	std::vector<Actor*> patients;
 private:
 	Type m_type = default_type;
 	unsigned int m_staff = 0;
@@ -96,6 +99,7 @@ private:
 	std::vector<Actor*> m_occupants;
 public:
 	House(std::vector<Actor*> family);
+	House();
 	~House();
 
 	std::vector<Actor*> Get_occupants();
