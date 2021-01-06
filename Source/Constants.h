@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include <tuple>
 
 uint32_t get_max_family_size();
@@ -30,4 +31,4 @@ uint32_t get_min_period();
 uint32_t get_max_period();
 uint32_t get_day_length();
 
-
+std::vector<std::string> get_names();

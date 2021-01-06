@@ -22,10 +22,78 @@ double Actor::matrix_distance(node& start_node, node& end_node, Matrix<int> tile
 	return distance;
 }
 
+void Actor::show()
+{
+	std::cout << name << std::endl;
+	std::cout << "Destination: " << std::get<0>(Destination) << " " << std::get<1>(Destination) << " " << std::get<2>(Destination) << std::endl;
+	std::cout << "Location: " << m_x << " " << m_y << " " << m_tilenum << std::endl;
+
+	switch(m_state)
+	{
+	case 0:
+		std::cout << "State: " << "idle" << std::endl;
+		break;
+	case 1:
+		std::cout << "State: " << "transit" << std::endl;
+		break;
+	case 2:
+		std::cout << "State: " << "doing task" << std::endl;
+		break;
+	case 3:
+		std::cout << "State: " << "waiting" << std::endl;
+		break;
+	default:
+		break;
+	}
+
+	switch (m_stage)
+	{
+	case 0:
+		std::cout << "Infection Stage: " << "Succeptible" << std::endl;
+		break;
+	case 1:
+		std::cout << "Infection Stage: " << "Infected" << std::endl;
+		break;
+	case 2:
+		std::cout << "Infection Stage: " << "Recovered" << std::endl;
+		break;
+	case 3:
+		std::cout << "Infection Stage: " << "Hospitalized" << std::endl;
+		break;
+	case 4:
+		std::cout << "Infection Stage: " << "Dead" << std::endl;
+		break;
+	default:
+		break;
+	}
+
+	switch (m_age_range)
+	{
+	case 1:
+		std::cout << "Age group: " << "zero to four" << std::endl;
+		break;
+	case 2:
+		std::cout << "Age group: " << "five to seventeen" << std::endl;
+		break;
+	case 3:
+		std::cout << "Age group: " << "eighteen to fourty nine" << std::endl;
+		break;
+	case 4:
+		std::cout << "Age group: " << "fifty to sixty five" << std::endl;
+		break;
+	case 5:
+		std::cout << "Age group: " << "sixty five plus" << std::endl;
+		break;
+	default:
+		break;
+	}
+}
+
 bool Actor::ask_director()
 {
+
 	std::vector<double> weights = { 1 - get_chance(), get_chance() };
-	int descision = Random::Discrete_distribution(weights, 1)[0];
+	descision = Random::Discrete_distribution(weights, 1)[0];
 
 	if (descision == 0)
 	{
@@ -35,6 +103,8 @@ bool Actor::ask_director()
 	{
 		return true;
 	}
+
+	return false;
 }
 
 bool Actor::A_star_algorithim(Transport_Net* network, Matrix<int> tile_matrix)
@@ -489,6 +559,7 @@ bool Actor::go_to_hospital()
 	std::vector<double> weight_vector = { m_hostiplization_risk, 1 - m_hostiplization_risk };
 	if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 	{
+		m_stage = Host;
 		hospital = true;
 		return true;
 	}
@@ -500,6 +571,7 @@ bool Actor::recover()
 	std::vector<double> weight_vector = { m_chance_of_recovery, 1 - m_chance_of_recovery };
 	if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 	{
+		m_stage = rec;
 		return true;
 	}
 	return false;
@@ -510,6 +582,7 @@ bool Actor::die()
 	std::vector<double> weight_vector = { m_mortality_risk, 1 - m_mortality_risk };
 	if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 	{
+		m_stage = dead;
 		return true;
 	}
 	return false;
@@ -729,6 +802,7 @@ bool Actor::go_to_place(std::tuple<int, int, int> destination, Transport_Net* ne
 
 		//do weighted walk to start location and then run the path then walk to the end node
 	}
+	return false;
 }
 
 Actor::State Actor::state_check()

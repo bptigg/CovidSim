@@ -18,6 +18,8 @@ void Model::RunModel()
 	Scenario::Scenario_Parameters scenario_param;
 	Scenario::Social_Distance_poll policies;
 
+	Log model_log(Log::LogLevelInfo);
+
 	if (RunModel.ScenarioImport(Infomation, Population_spread, Population_diversity, child_medical, adult_medical, scenario_param, policies) == true)
 	{
 
@@ -202,12 +204,24 @@ void Model::RunModel()
 			model_data.sucept[i]->set_stage(Actor::sucept);
 		}
 
-		for (uint32_t i = 0; i < get_starting_infected(); i++)
 		{
-			int x = Random::random_number(0, model_data.sucept.size(), {});
-			model_data.infected.push_back(model_data.sucept[x]);
-			model_data.infected[i]->set_stage(Actor::infect);
-			model_data.sucept.erase(model_data.sucept.begin() + x);
+			int x = 0;
+			for (uint32_t i = 0; i < get_starting_infected(); i++)
+			{
+				x = Random::random_number(0, model_data.sucept.size(), {});
+				actor_vec[x]->name = get_names()[0];
+				model_data.infected.push_back(model_data.sucept[x]);
+				model_data.infected[i]->set_stage(Actor::infect);
+				model_data.sucept.erase(model_data.sucept.begin() + x);
+			}
+
+			for (int i = 1; i < get_names().size(); i++)
+			{
+				if (i != x)
+				{
+					actor_vec[i]->name = get_names()[i];
+				}
+			}
 		}
 
 		for (uint32_t i = 0; i < RunModel.Num_Of_Tiles; i++)
@@ -232,7 +246,13 @@ void Model::RunModel()
 		std::vector<std::pair<Actor*, int>> infected_homes = {};
 
 		// The actual model
-		while (count != model_data.counts)
+		//have a thread that finds agents.
+		bool model_end = false;
+		std::thread getagent(Model::get_agent, actor_vec, std::ref(model_end));
+		bool exit = false;
+		std::thread escape(Model::check_escape, std::ref(exit), std::ref(model_end));
+		escape.detach();
+		while (count != model_data.counts && exit == false)
 		{
 			//world tasks
 			model_data.previous_infected = model_data.infected.size();
@@ -240,7 +260,6 @@ void Model::RunModel()
 			if(day_count == get_day_length())
 			{
 				day_count = 0;
-				break;
 			}
 			if (day_count == 0)
 			{
@@ -291,13 +310,21 @@ void Model::RunModel()
 				{
 					for (int i = 0; i < actor_vec.size(); i++)
 					{
+						if (actor_vec[i]->stage_check() == Actor::dead)
+						{
+							continue;
+						}
+						if (actor_vec[i]->hospital == true)
+						{
+							continue;
+						}
 						if (actor_vec[i]->idle_counts > get_min_idle_time())
 						{
 							if (nick.m_current_tasks.size() <= nick.max_actors_not_idle)
 							{
 								bool ask = false;
 								ask = actor_vec[i]->ask_director();
-								if (ask == true)
+								if (ask == true || ask > 1)
 								{
 									nick.request_task(actor_vec[i]);
 									actor_vec[i]->idle_counts = 0;
@@ -427,12 +454,17 @@ void Model::RunModel()
 				}
 				if (model_data.infected[i]->recover() == true)
 				{
+					if (model_data.infected[i]->hospital == true)
+					{
+						functions::remove_from_building(model_data.infected[i], tiles_vec);
+					}
 					model_data.recovered.push_back(model_data.infected[i]);
 					removed.push_back(i);
 					continue;
 				}
 				if (model_data.infected[i]->die() == true)
 				{
+					functions::remove_from_building(model_data.infected[i], tiles_vec);
 					model_data.dead.push_back(model_data.infected[i]);
 					removed.push_back(i);
 					continue;
@@ -459,8 +491,10 @@ void Model::RunModel()
 				output.join();
 			}
 		}
-		std::cin.get();
-
+		model_end = true;
+		getagent.join();
+		std::cout << "Model Finished" << std::endl;
+		model_log.LogFucntion(Log::LogLevelInfo, 5);
 
 		//clean up code
 		{
@@ -501,11 +535,7 @@ void Model::RunModel()
 
 			delete transport;
 		}
-
-		std::cin.get();
 	}
-	std::cin.get();
-
 }
 
 void Model::RunRandomModel()
@@ -911,6 +941,65 @@ std::string Model::Get_filename(std::string& file_name)
 	return filename;
 }
 
+void Model::get_agent(const std::vector<Actor*> agents, const bool& leave)
+{
+	while (leave == false)
+	{
+		int choice = 0;
+		system("CLS");
+		std::cout << "name(0) or number(1): ";
+		if (leave == true)
+		{
+			break;
+		}
+		std::cin >> choice;
+
+		if (choice == 1)
+		{
+			int num = 0;
+			std::cout << "Starting from 0 and up to " << agents.size() - 1 << std::endl;
+			std::cout << "Number: ";
+			std::cin >> num;
+
+			agents[num]->show();
+		}
+		if (choice == 0)
+		{
+			std::string Name;
+			std::cout << "Name: ";
+			std::cin >> Name;
+
+			std::vector<int> results;
+			for (int i = 0; i < agents.size(); i++)
+			{
+				if (agents[i]->name == Name)
+				{
+					results.push_back(i);
+				}
+			}
+
+			int result_num = 0;
+			if (results.size() == 0) { continue; }
+			std::cout << Name << " returned " << results.size() << " results. Which one, start at 0 and go up to " << results.size() - 1 <<" : ";
+			std::cin >> result_num;
+			agents[results[result_num]]->show();
+		}
+		int clear = 0;
+		std::cout << "Clear? Yes(0) or No(1): ";
+		std::cin >> clear;
+	}
+}
+
+void Model::check_escape(bool& escape, const bool& model_end)
+{
+	while (GetAsyncKeyState(VK_ESCAPE) == 0 || model_end == true)
+	{
+
+	}
+	escape = true;
+
+}
+
 std::vector<std::pair<int, int>> functions::generate_circle(unsigned int radius, std::pair<int, int> center)
 {
 	std::vector <std::pair<int, int>> points;
@@ -1088,4 +1177,86 @@ void functions::write_to_file(const Model_Data& data, std::string filename)
 bool functions::sortbysec(const std::pair<Actor*, int>& a, const std::pair<Actor*, int>& b)
 {
 	return (a.second < b.second);
+}
+
+bool functions::remove_from_building(Actor* agent, std::vector<Tile*> tile_vec)
+{
+	int tilenum = std::get<2>(agent->Get_Location());
+	agent->set_location_state(Actor::outside);
+	for (int i = 0; i < tile_vec[tilenum]->Pub_buildings.size(); i++)
+	{
+		if (tile_vec[tilenum]->Pub_buildings[i]->Get_Location() == agent->Get_Location())
+		{
+			for (int a = 0; a < tile_vec[tilenum]->Pub_buildings[i]->Get_people_currently_in_buildling().size(); a++)
+			{
+				if (tile_vec[tilenum]->Pub_buildings[i]->Get_people_currently_in_buildling()[a] == agent)
+				{
+					tile_vec[tilenum]->Pub_buildings[i]->Get_people_currently_in_buildling().erase(tile_vec[tilenum]->Pub_buildings[i]->Get_people_currently_in_buildling().begin() + a);
+					return true;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < tile_vec[tilenum]->edu_buildings.size(); i++)
+	{
+		if (tile_vec[tilenum]->edu_buildings[i]->Get_Location() == agent->Get_Location())
+		{
+			for (int a = 0; a < tile_vec[tilenum]->edu_buildings[i]->Get_people_currently_in_buildling().size(); a++)
+			{
+				if (tile_vec[tilenum]->edu_buildings[i]->Get_people_currently_in_buildling()[a] == agent)
+				{
+					tile_vec[tilenum]->edu_buildings[i]->Get_people_currently_in_buildling().erase(tile_vec[tilenum]->edu_buildings[i]->Get_people_currently_in_buildling().begin() + a);
+					return true;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < tile_vec[tilenum]->Generic_work.size(); i++)
+	{
+		if (tile_vec[tilenum]->Generic_work[i]->Get_Location() == agent->Get_Location())
+		{
+			for (int a = 0; a < tile_vec[tilenum]->Generic_work[i]->Get_people_currently_in_buildling().size(); a++)
+			{
+				if (tile_vec[tilenum]->Generic_work[i]->Get_people_currently_in_buildling()[a] == agent)
+				{
+					tile_vec[tilenum]->Generic_work[i]->Get_people_currently_in_buildling().erase(tile_vec[tilenum]->Generic_work[i]->Get_people_currently_in_buildling().begin() + a);
+					return true;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < tile_vec[tilenum]->Houses.size(); i++)
+	{
+		if (tile_vec[tilenum]->Houses[i]->Get_Location() == agent->Get_Location())
+		{
+			for (int a = 0; a < tile_vec[tilenum]->Houses[i]->Get_people_currently_in_buildling().size(); a++)
+			{
+				if (tile_vec[tilenum]->Houses[i]->Get_people_currently_in_buildling()[a] == agent)
+				{
+					tile_vec[tilenum]->Houses[i]->Get_people_currently_in_buildling().erase(tile_vec[tilenum]->Houses[i]->Get_people_currently_in_buildling().begin() + a);
+					return true;
+				}
+			}
+		}
+	}
+
+	for (int i = 0; i < tile_vec[tilenum]->public_transport.size(); i++)
+	{
+		if (tile_vec[tilenum]->public_transport[i]->Get_Location() == agent->Get_Location())
+		{
+			for (int a = 0; a < tile_vec[tilenum]->public_transport[i]->Get_people_currently_in_building().size(); a++)
+			{
+				if (tile_vec[tilenum]->public_transport[i]->Get_people_currently_in_building()[a] == agent)
+				{
+					tile_vec[tilenum]->public_transport[i]->Get_people_currently_in_building().erase(tile_vec[tilenum]->public_transport[i]->Get_people_currently_in_building().begin() + a);
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
 }

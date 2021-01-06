@@ -25,6 +25,7 @@ public:
 	int failed = 0;
 	bool sleep_active = false;
 	Tasks::Time_of_day world_time = Tasks::all;
+	bool mandatorytask = false;
 
 	std::vector<std::tuple<Task*, Actor*, int>> m_current_tasks;
 	unsigned int max_actors_not_idle = 5000;
@@ -46,7 +47,6 @@ private:
 
 	bool task_permission(Actor::State state);
 
-	void change_actor_location(Actor* actor, Task task, bool task_end);
 	unsigned int generate_random_task(Actor::Age_Catagory age_cat, Tasks::Time_of_day time);
 	std::tuple<std::tuple<int, int, int>, Public_Buildings*> public_task_setup(int& actor_tile, Tasks::Destination_Types location_type);
 
@@ -63,4 +63,5 @@ public:
 	void run_tasks();
 	
 	void go_to_hospital(std::vector<Actor*>& patients);
+	void change_actor_location(Actor* actor, Task task, bool task_end);
 }; 

@@ -87,6 +87,7 @@ void Director::change_actor_location(Actor* actor, Task task, bool task_end)
 void Director::world_task(mandatory_task task)
 {
 	clear_task_vector();
+	mandatorytask = true;
 	if (task != mandatory_task::sleep)
 	{
 		for (auto actor : m_population)
@@ -200,10 +201,12 @@ void Director::world_task(mandatory_task task)
 			}
 			else if (task == mandatory_task::idle)
 			{
+			mandatorytask = false;
 				int x = 0;
 				if (actor->state_check() != Actor::idle)
 				{
 					actor->set_state(Actor::idle);
+					actor->idle_counts = 0;
 					if (actor->state_check() == Actor::in_transit && m_transit.size() != 0)
 					{
 						find_in_vector(m_transit, x, actor);
@@ -224,6 +227,7 @@ void Director::world_task(mandatory_task task)
 	}
 	else if (task == mandatory_task::sleep)
 	{
+		mandatorytask = false;
 		if (sleep_active == false)
 		{
 			sleep_active = true;
@@ -266,7 +270,7 @@ void Director::run_tasks()
 				//m_doing_task.push_back(agent);
 				continue;
 			}
-			if (std::get<0>(m_current_tasks[i])->run_time == std::get<0>(m_current_tasks[i])->task_length)
+			if (std::get<0>(m_current_tasks[i])->run_time == std::get<0>(m_current_tasks[i])->task_length && mandatorytask == false)
 			{
 				change_actor_location(agent, *std::get<0>(m_current_tasks[i]), true);
 				agent->task_dest = false;

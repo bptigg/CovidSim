@@ -7,6 +7,7 @@
 
 #include <cstdlib>
 #include <algorithm>
+#include <Windows.h>
 
 
 #include "Random.h"
@@ -67,6 +68,7 @@ namespace functions
 	bool find_in_vec(const std::vector<Actor*>& vector, int& position, const Actor* value);
 	void write_to_file(const Model_Data& data, std::string filename);
 	bool sortbysec (const std::pair<Actor*, int>& a, const std::pair<Actor*, int>& b);
+	bool remove_from_building(Actor* agent, std::vector<Tile*> tile_vec);
 }
 
 namespace Model
@@ -87,6 +89,9 @@ namespace Model
 	void transport_infection(std::vector<Actor*>& succept, std::vector<Actor*>& infected, std::vector<std::pair<Actor*, int>>& return_vector);
 	
 	std::string Get_filename(std::string& file_name);
+
+	void get_agent(const std::vector<Actor*> agents, const bool& leave);
+	void check_escape(bool& escape, const bool& model_end);
 
 }
 
