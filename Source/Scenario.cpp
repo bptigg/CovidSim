@@ -1644,6 +1644,28 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 	unsigned int errors = 0;
 
 	//could probably write this as a function but cba to do at the moment.
+	std::vector<std::string> names;
+
+	std::ifstream name_files;
+	std::string line;
+	name_files.open("names/boys.txt", std::ios::in);
+	while (name_files.eof() == false)
+	{
+		getline(name_files, line);
+		names.push_back(line);
+	}
+	name_files.close();
+	name_files.clear();
+	name_files.seekg(0, std::ios::beg);
+
+	name_files.open("names/girls.txt", std::ios::in);
+	while (name_files.eof() == false)
+	{
+		getline(name_files, line);
+		names.push_back(line);
+	}
+
+	std::shuffle(names.begin(), names.end(), std::default_random_engine(0));
 
 	for (int i = 0; i < Num_Of_Tiles; i++)
 	{
@@ -2339,12 +2361,19 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 		job_applicable.clear();
 	}
 
+	int name = 0;
 	for (int i = 0; i < Actor_size; i++)
 	{	
 		auto [x, y, tile] = population_list[i].House_Location();
 		population_list[i].set_location(x, y, tile);
 		population_list[i].set_location_state(Actor::home);
 		population_list[i].set_symptom_severity(symptom_severity[i]);
+		if (name == names.size())
+		{
+			name = 0;
+		}
+		population_list[i].name = names[name];
+		name++;
 	}
 
 	create_transport_matrix(transport_network);

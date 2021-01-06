@@ -32,6 +32,9 @@ class Actor
 {
 	friend class Director;
 public:
+
+	std::string name;
+
 	unsigned int tile_size = 0;
 	unsigned int idle_counts = 0;
 	unsigned int task_counts = 0;
@@ -106,6 +109,8 @@ private:
 	int point_in_path = 0;
 	int weight_count = 0;
 
+	int descision = 0;
+
 	std::tuple<int, int, unsigned int> House_coord;
 	std::tuple<int, int, unsigned int> Work_coord;
 
@@ -125,6 +130,8 @@ private:
 	double matrix_distance(node& start_node, node& end_node, Matrix<int> tile_matrix);
 
 public:
+
+	void show();
 
 	bool ask_director();
 

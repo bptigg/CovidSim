@@ -126,3 +126,8 @@ uint32_t get_day_length()
 	return DAY_LENGTH;
 }
 
+std::vector<std::string> NAMES = { "Hugo", "Stephen", "Gage", "George", "Ryan", "Ben", "Arthur"};
+std::vector <std::string> get_names()
+{
+	return NAMES;
+}
