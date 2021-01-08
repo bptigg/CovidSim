@@ -69,7 +69,7 @@ void Public_Buildings::set_staff(unsigned int& staff_amount)
 
 void Public_Buildings::check_closed()
 {
-	int ill;
+	int ill = 0;
 	for (int i = 0; i < staff.size(); i++)
 	{
 		if (staff[i]->symptoms == true)
@@ -106,7 +106,7 @@ void Education_Buildings::set_staff(unsigned int& staff_amount)
 
 void Education_Buildings::check_closed()
 {
-	int ill;
+	int ill = 0;
 	for (int i = 0; i < staff.size(); i++)
 	{
 		if (staff[i]->symptoms == true)
@@ -236,7 +236,7 @@ void Generic_work::add_employees(Actor& employee)
 
 void Generic_work::check_closed()
 {
-	int ill;
+	int ill = 0;
 	for (int i = 0; i < m_employees.size(); i++)
 	{
 		if (m_employees[i]->symptoms == true)
