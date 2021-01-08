@@ -572,6 +572,7 @@ bool Actor::recover()
 	if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 	{
 		m_stage = rec;
+		symptoms = false;
 		return true;
 	}
 	return false;

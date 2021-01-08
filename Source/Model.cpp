@@ -318,6 +318,10 @@ void Model::RunModel()
 						{
 							continue;
 						}
+						if (actor_vec[i]->symptoms == true)
+						{
+							continue;
+						}
 						if (actor_vec[i]->idle_counts > get_min_idle_time())
 						{
 							if (nick.m_current_tasks.size() <= nick.max_actors_not_idle)
@@ -442,6 +446,13 @@ void Model::RunModel()
 				{
 					continue;
 				}
+				else
+				{
+					if (model_data.infected[i]->Get_Location() != model_data.infected[i]->House_Location())
+					{
+						nick.go_home(model_data.infected[i]);
+					}
+				}
 
 				if (model_data.infected[i]->hospital != true)
 				{
@@ -482,6 +493,22 @@ void Model::RunModel()
 			//output
 			std::thread output(functions::write_to_file, model_data, filename_new);
 			if (count != model_data.counts - 1) { output.detach(); }
+
+			for (int i = 0; i < tiles_vec.size(); i++)
+			{
+				for (int e = 0; e < tiles_vec[i]->Pub_buildings.size(); e++)
+				{
+					tiles_vec[i]->Pub_buildings[e]->check_closed();
+				}
+				for (int e = 0; e < tiles_vec[i]->edu_buildings.size(); e++)
+				{
+					tiles_vec[i]->Pub_buildings[e]->check_closed();
+				}
+				for (int e = 0; e < tiles_vec[i]->Generic_work.size(); e++)
+				{
+					tiles_vec[i]->Pub_buildings[e]->check_closed();
+				}
+			}
 			//functions::write_to_file(model_data, filename_new);
 			count++;
 			day_count++;

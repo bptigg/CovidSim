@@ -34,6 +34,10 @@ void Buildings::remove_people_building(Actor* entity)
 	}
 }
 
+void Buildings::check_closed()
+{
+}
+
 void Buildings::set_location(int x, int y, unsigned int tile_num)
 {
 	m_x = x;
@@ -63,6 +67,23 @@ void Public_Buildings::set_staff(unsigned int& staff_amount)
 	m_staff = staff_amount;
 }
 
+void Public_Buildings::check_closed()
+{
+	int ill;
+	for (int i = 0; i < staff.size(); i++)
+	{
+		if (staff[i]->symptoms == true)
+		{
+			ill++;
+		}
+	}
+
+	if (ill > ((double)staff.size() / 2))
+	{
+		closed;
+	}
+}
+
 void Public_Buildings::set_capacity(unsigned int& capacity_amount)
 {
 	m_capacity = capacity_amount;
@@ -81,6 +102,23 @@ void Education_Buildings::set_type(Education_Buildings::edu_type type)
 void Education_Buildings::set_staff(unsigned int& staff_amount)
 {
 	m_staff = staff_amount;
+}
+
+void Education_Buildings::check_closed()
+{
+	int ill;
+	for (int i = 0; i < staff.size(); i++)
+	{
+		if (staff[i]->symptoms == true)
+		{
+			ill++;
+		}
+	}
+
+	if (ill > ((double)staff.size() / 2))
+	{
+		closed = true;
+	}
 }
 
 void Education_Buildings::set_capacity(unsigned int& capacity_amount)
@@ -194,4 +232,21 @@ std::vector<Actor*> Generic_work::Get_employees()
 void Generic_work::add_employees(Actor& employee)
 {
 	m_employees.push_back(&employee);
+}
+
+void Generic_work::check_closed()
+{
+	int ill;
+	for (int i = 0; i < m_employees.size(); i++)
+	{
+		if (m_employees[i]->symptoms == true)
+		{
+			ill++;
+		}
+	}
+
+	if (ill > ((double)m_employees.size() / 2))
+	{
+		closed = true;
+	}
 }

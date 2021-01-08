@@ -7,6 +7,8 @@
 
 class Buildings
 {
+public:
+	bool closed = false;
 private:
 	int m_x = 0;
 	int m_y = 0;
@@ -27,6 +29,8 @@ public:
 	virtual void set_capacity();
 	void add_people_buiding(Actor* entity);
 	void remove_people_building(Actor* entity);
+
+	virtual void check_closed();
 };
 
 class Public_Buildings : public Buildings
@@ -55,6 +59,7 @@ public:
 
 	void set_type(Type type);
 	void set_staff(unsigned int& staff_amount);
+	void check_closed();
 	void set_capacity(unsigned int& capacity_amount);
 
 	void add_staff(Actor& staff_member);
@@ -86,6 +91,7 @@ public:
 
 	void set_type(edu_type type);
 	void set_staff(unsigned int& staff_amount);
+	void check_closed();
 	void set_capacity(unsigned int& capacity_amount);
 
 	void add_students(Actor& student);
@@ -114,4 +120,5 @@ public:
 	~Generic_work();
 	std::vector <Actor*> Get_employees();
 	void add_employees(Actor& employee);
+	void check_closed();
 };

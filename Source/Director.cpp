@@ -138,6 +138,11 @@ void Director::world_task(mandatory_task task)
 				if (found == true)
 				{
 					task->location_type = { NULL, NULL, NULL, NULL, m_tiles[tile_num]->Generic_work[i] };
+					if (m_tiles[tile_num]->Generic_work[i]->closed == true)
+					{
+						delete task;
+						continue;
+					}
 				}
 				else
 				{
@@ -152,6 +157,11 @@ void Director::world_task(mandatory_task task)
 					if (found == true)
 					{
 						task->location_type = { NULL, m_tiles[tile_num]->edu_buildings[i], NULL, NULL, NULL };
+						if (m_tiles[tile_num]->edu_buildings[i]->closed == true)
+						{
+							delete task;
+							continue;
+						}
 					}
 					else
 					{
@@ -166,6 +176,11 @@ void Director::world_task(mandatory_task task)
 						if (found == true)
 						{
 							task->location_type = { m_tiles[tile_num]->Pub_buildings[i], NULL, NULL, NULL, NULL };
+							if (m_tiles[tile_num]->Pub_buildings[i]->closed == true)
+							{
+								delete task;
+								continue;
+							}
 						}
 						else
 						{
@@ -627,6 +642,10 @@ void Director::request_task(Actor* requestee)
 		int tile_number = std::get<2>(requestee->Get_Location());
 		auto [location, building] = public_task_setup(tile_number, (Tasks::Destination_Types)task_value);
 		int task_length = Random::random_number(20, 300, {});
+		if (building->closed == true)
+		{
+			return;
+		}
 		Task* task = new Task;
 		task->destination = (Tasks::Destination_Types)task_value;
 		task->location_type = { building, NULL, NULL, NULL, NULL };
