@@ -1,0 +1,132 @@
+Scenario_Name: actor_test.cvsn
+World_Infomation
+
+Tile_Size(meters)
+10
+
+Num_of_tiles
+1
+
+Num_of_Unique_Buildings
+0
+
+Unique_Buildings
+Public_Services
+Education_buildings
+Num_of_Primary Schools
+0
+
+Num_of_Secondry Schools
+0
+
+Num_of_Universities
+0
+
+
+Public_Services
+Num_of_Hospitals
+0
+
+Num_of_Places of Worship
+0
+
+Num_of_Restuarants
+0
+
+Num_of_Cinemas
+0
+
+Num_of_Shopping centers
+0
+
+Num_of_Parks
+0
+
+
+Public_Transport
+
+Bus Network
+Number of Bus stops/station
+0
+Bus_Network_adjacency_matrix
+
+
+Train Network
+Number of Train stations
+0
+Train_Network_adjacency_matrix
+
+Airports
+Number_of_airports
+0
+
+Metro Network
+Number of Metro stations
+0
+Metro_Network_adjacency_matrix
+
+Scenario_Infomation
+Population_data
+Size_of_Population
+20
+Population_Pyramind_(%)
+10
+20
+15
+20
+25
+Population_race_data (%)
+25
+25
+25
+25
+Child_medical_data (%)
+10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+Adult_medical_data (%)
+10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+10
+Scenario parameters
+100000
+Output_Data
+1
+1
+1
+1
+1
+1
+1
+1
+1
+
+Social_Distance_policies
+10
+20
+30
+40
+50
+60
+70
+

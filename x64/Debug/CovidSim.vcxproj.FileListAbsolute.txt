@@ -1,2 +1,0 @@
-C:\Users\Benji\Documents\GitHub\CovidSim\x64\Debug\CovidSim.exe
-C:\Users\Benji\Documents\GitHub\CovidSim\x64\Debug\CovidSim.pdb

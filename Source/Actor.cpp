@@ -714,6 +714,7 @@ bool Actor::weighted_walk(std::pair<unsigned int, unsigned int> location)
 		//std::cout << time_taken << std::endl;
 		return true;
 	}
+	return false;
 }
 
 bool Actor::go_to_place(std::tuple<int, int, int> destination, Transport_Net* network, Matrix<int> tile_matrix)

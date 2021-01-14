@@ -169,7 +169,7 @@ bool Scenario::ScenarioImport(World_Infomation& infomation, Population_Pyramid& 
 		return true;
 	}
 
-
+	return false;
 }
 
 void Scenario::ScenarioEditor()
@@ -592,7 +592,7 @@ void Scenario::ScenarioEditor()
 		std::cout << "No known disease (%): ";
 		std::cin >> child_data->no_known_disease;
 
-		ScenarioFile << child_data->Asthma << std::endl << child_data->Auto_immune_disease << std::endl << child_data->Cardiovascular_disease << std::endl << child_data->chronic_lung_disease << std::endl << child_data->Gastrointestinal_liver_disease << std::endl << child_data->Hypertension << std::endl << child_data->Immune_disease << std::endl << child_data->Metabolic_disease << std::endl << child_data->Neurological_disease << std::endl << child_data->Obesity << std::endl << child_data->Renal_disease << std::endl << child_data->other_disease << std::endl << child_data->no_known_disease << std::endl;
+		ScenarioFile << child_data->Asthma << std::endl << child_data->Auto_immune_disease  << std::endl << child_data->Cardiovascular_disease << std::endl << child_data->chronic_lung_disease << std::endl << child_data->Gastrointestinal_liver_disease << std::endl << child_data->Hypertension << std::endl << child_data->Immune_disease << std::endl << child_data->Metabolic_disease << std::endl << child_data->Neurological_disease << std::endl << child_data->Obesity << std::endl << child_data->Renal_disease << std::endl << child_data->other_disease << std::endl << child_data->no_known_disease << std::endl;
 		delete child_data;
 
 		std::system("CLS");
@@ -2028,9 +2028,27 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 		}
 	}
 
-	medical_child = Random::Discrete_distribution(population_child_medical, num_of_children);
-	medical_adult = Random::Discrete_distribution(population_adult_medical, (Actor_size - num_of_children));
-	symptom_severity = Random::Discrete_distribution(symptom_weights, Actor_size);
+	std::vector<double> child_medical;
+	for (int i = 0; i < population_child_medical.size(); i++)
+	{
+		child_medical.push_back(population_child_medical[i] / 100.00);
+	}
+
+	std::vector<double> adult_medical;
+	for (int i = 0; i < population_adult_medical.size(); i++)
+	{
+		adult_medical.push_back(population_adult_medical[i] / 100.00);
+	}
+
+	std::vector<double> symptom;
+	for (int i = 0; i < symptom_weights.size(); i++)
+	{
+		symptom.push_back(symptom_weights[i] / 100.00);
+	}
+
+	medical_child = Random::Discrete_distribution(child_medical, num_of_children);
+	medical_adult = Random::Discrete_distribution(adult_medical, (Actor_size - num_of_children));
+	symptom_severity = Random::Discrete_distribution(symptom, Actor_size);
 
 
 	uint32_t amount = 0;
@@ -2367,7 +2385,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				{
 					work_places[work_slot]->add_employees(*job_applicable[i]);
 					job_applicable[i]->set_work_location(work_places[work_slot]->Get_Location());
-					job_applicable[i]->gen_work == work_places[work_slot];
+					job_applicable[i]->gen_work = work_places[work_slot];
 					place_found = true;
 				}
 				else

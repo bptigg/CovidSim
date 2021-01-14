@@ -90,4 +90,5 @@ unsigned int Random::random_number(int min, int max, std::vector<unsigned int> u
 			return random_number;
 		}
 	}
+	return 0;
 }

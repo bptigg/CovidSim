@@ -1,0 +1,239 @@
+Scenario_Name: scenario_test
+World_Infomation
+
+Tile_Size(meters)
+50
+
+Num_of_tiles
+1
+
+Num_of_Unique_Buildings
+14
+
+Unique_Buildings
+Public_Services
+Education_buildings
+Num_of_Primary Schools
+2
+
+Primary Schools 1
+2
+30
+0
+20
+300
+
+Primary Schools 2
+45
+9
+0
+40
+600
+
+Num_of_Secondry Schools
+1
+
+Secondry Schools 1
+25
+25
+0
+100
+2000
+
+Num_of_Universities
+1
+
+Universities 1
+10
+40
+0
+300
+5000
+
+
+Public_Services
+Num_of_Hospitals
+1
+
+Hospitals 1
+20
+35
+0
+200
+1000
+
+Num_of_Places of Worship
+0
+
+Num_of_Restuarants
+2
+
+Restuarants 1
+23
+34
+0
+20
+30
+
+Restuarants 2
+45
+43
+0
+10
+25
+
+Num_of_Cinemas
+0
+
+Num_of_Shopping centers
+1
+
+Shopping centers 1
+32
+45
+0
+200
+2000
+
+Num_of_Parks
+1
+
+Parks 1
+27
+38
+0
+50
+10000
+
+
+Public_Transport
+
+Bus Network
+Number of Bus stops/station
+5
+Bus_stop 1
+Type
+1
+0
+0
+0
+20
+
+Bus_stop 2
+Type
+0
+24
+25
+0
+0
+
+Bus_stop 3
+Type
+0
+34
+47
+0
+0
+
+Bus_stop 4
+Type
+0
+45
+49
+0
+0
+
+Bus_stop 5
+Type
+0
+10
+40
+0
+0
+
+Bus_Network_adjacency_matrix
+0 10 20 25 15 
+10 0 34 25 12 
+20 34 0 10 15 
+25 25 10 0 17 
+15 12 15 17 0 
+
+
+Train Network
+Number of Train stations
+0
+Train_Network_adjacency_matrix
+
+Airports
+Number_of_airports
+0
+
+Metro Network
+Number of Metro stations
+0
+Metro_Network_adjacency_matrix
+
+Scenario_Infomation
+Population_data
+Size_of_Population
+10000
+Population_Pyramind_(%)
+15
+20
+25
+20
+10
+Population_race_data (%)
+25
+25
+25
+25
+Child_medical_data (%)
+10
+10
+20
+5
+0
+2
+5
+7
+1
+5
+9
+30
+50
+Adult_medical_data (%)
+10
+23
+45
+2
+1
+5
+3
+2
+9
+25
+1
+23
+42
+Scenario parameters
+20000
+Output_Data
+1
+1
+1
+1
+1
+1
+1
+1
+
+Social_Distance_policies
+12
+24
+36
+48
+60
+72
+84
+

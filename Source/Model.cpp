@@ -638,6 +638,10 @@ void Model::RunModel()
 			delete transport;
 		}
 	}
+	else
+	{
+		std::cout << "failed" << std::endl;
+	}
 }
 
 void Model::RunRandomModel()
