@@ -50,6 +50,12 @@ uint32_t get_starting_infected()
 	return STARTING_INFECTED;
 }
 
+uint32_t LATENT_TIME = 3600; //3600
+uint32_t get_latent_time()
+{
+	return LATENT_TIME;
+}
+
 double ASYMPTOMATIC = 0.75;
 double MILD = 1;
 double FULL = 1.25;
@@ -130,4 +136,89 @@ std::vector<std::string> NAMES = { "Hugo", "Stephen", "Gage", "George", "Ryan", 
 std::vector <std::string> get_names()
 {
 	return NAMES;
+}
+
+//COVID VALUES (CURRENTLY TEMPORARY STAND IN VALUES)
+double INFECTIVITY = 0.125;
+double get_infect()
+{
+	return INFECTIVITY;
+}
+
+double RECOVERY = 0.1;
+double get_recover()
+{
+	return RECOVERY;
+}
+
+//hostiplization
+double CONTROL = 0.08;
+double Z_FO = 0.25;
+double FI_SE = 0.12;
+double FIF_SF = 4.0;
+double SF_PLUS = 9;
+
+double get_hospilization_age_co(int num)
+{
+	switch (num)
+	{
+	case 0:
+		return CONTROL * Z_FO;
+		break;
+	case 1:
+		return CONTROL * FI_SE;
+		break;
+	case 2:
+		return CONTROL;
+		break;
+	case 3:
+		return FIF_SF * CONTROL;
+		break;
+	case 4:
+		return SF_PLUS * CONTROL;
+		break;
+	default:
+		return CONTROL;
+		break;
+	}
+	return CONTROL;
+}
+
+//child medical
+
+//adult medical
+
+//ethnic group
+
+//Dying
+double CONTROL_D = 0.1;
+double Z_FO_D = 0.12;
+double FI_SE_D = 0.0625;
+double FIF_SF_D = 30;
+double SF_PLUS_D = 310;
+
+double get_dying_age_co(int num)
+{
+	switch (num)
+	{
+	case 0:
+		return CONTROL_D * Z_FO_D;
+		break;
+	case 1:
+		return CONTROL_D * FI_SE_D;
+		break;
+	case 2:
+		return CONTROL_D;
+		break;
+	case 3:
+		return FIF_SF_D * CONTROL_D;
+		break;
+	case 4:
+		return SF_PLUS_D * CONTROL_D;
+		break;
+	default:
+		return CONTROL_D;
+		break;
+	}
+	return CONTROL_D;
 }

@@ -15,6 +15,10 @@
 
 class Director;
 class Public_transport_building;
+class Public_Buildings;
+class Education_Buildings;
+class Generic_work;
+class House;
 
 struct node
 {
@@ -39,6 +43,12 @@ public:
 	unsigned int idle_counts = 0;
 	unsigned int task_counts = 0;
 
+	Public_transport_building* trasnport_work = NULL;
+	Public_Buildings* public_work = NULL;
+	Education_Buildings* edu_work = NULL;
+	Generic_work* gen_work = NULL;
+	House* Home = NULL;
+
 	enum Age_Catagory
 	{
 		zero_to_four = 0, five_to_seventeen, eighteen_to_fortynine, fifty_to_sixtyfour, sixtyfive_plus, default_age_range
@@ -52,7 +62,7 @@ public:
 
 	enum Stage
 	{
-		sucept = 0, infect, rec, Host, dead
+		sucept = 0, latent, infect, rec, Host, dead
 	};
 
 	enum Work_risk
@@ -82,6 +92,9 @@ public:
 	int infection_length = 0;
 	bool symptoms = false;
 	bool hospital = false;
+
+	int medical = 0;
+	int race = 0;
 
 private:
 	double m_infectivity = 0; //This will depend on your sympton severity

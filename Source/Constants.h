@@ -30,5 +30,11 @@ double get_chance();
 uint32_t get_min_period();
 uint32_t get_max_period();
 uint32_t get_day_length();
+uint32_t get_latent_time();
 
 std::vector<std::string> get_names();
+
+double get_infect();
+double get_recover();
+double get_hospilization_age_co(int num);
+double get_dying_age_co(int num);

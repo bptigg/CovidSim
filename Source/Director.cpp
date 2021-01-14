@@ -84,29 +84,18 @@ void Director::change_actor_location(Actor* actor, Task task, bool task_end)
 	}
 }
 
-void Director::world_task(mandatory_task task)
+void Director::world_task(mandatory_task task_type)
 {
 	clear_task_vector();
 	mandatorytask = true;
-	if (task != mandatory_task::sleep)
+	if (task_type != mandatory_task::sleep)
 	{
 		for (auto actor : m_population)
 		{
-			if (task == mandatory_task::go_home)
+			if (task_type == mandatory_task::go_home)
 			{
 				Task* task = new Task;
-				int x = std::get<0>(actor->House_Location());
-				int y = std::get<1>(actor->House_Location());
-				int tile_num = std::get<2>(actor->House_Location());
-				int i = 0;
-				for (i < m_tiles[tile_num]->Houses.size(); i++;)
-				{
-					if (m_tiles[tile_num]->Houses[i]->Get_Location() == actor->House_Location())
-					{
-						break;
-					}
-				}
-				task->location_type = { NULL, NULL, NULL, m_tiles[tile_num]->Houses[i], NULL };
+				task->location_type = { NULL, NULL, NULL, actor->Home, NULL };
 				task->location = actor->House_Location();
 
 				int delay = Random::random_number(0, 10, {});
@@ -114,31 +103,51 @@ void Director::world_task(mandatory_task task)
 				actor->set_state(Actor::waiting);
 				m_current_tasks.push_back({ task, actor, delay });
 			}
-			else if (task == mandatory_task::go_to_work)
+			else if (task_type == mandatory_task::go_to_work)
 			{
 				Task* task = new Task;
-				int x = std::get<0>(actor->Work_Location());
-				int y = std::get<1>(actor->Work_Location());
-				int tile_num = std::get<2>(actor->Work_Location());
+				
+				//int x = std::get<0>(actor->Work_Location());
+				//int y = std::get<1>(actor->Work_Location());
+				//int tile_num = std::get<2>(actor->Work_Location());
 				//Generic_work* work = new Generic_work;
 				//Education_Buildings* school = new Education_Buildings;
 				//Public_Buildings* Work = new Public_Buildings;
 				//Public_transport_building* work_public_transport = new Public_transport_building;
 
-				bool found = false;
-				int i = 0;
-				for (i < m_tiles[tile_num]->Generic_work.size(); i++;)
+				if (actor->trasnport_work != NULL)
 				{
-					if (m_tiles[tile_num]->Generic_work[i]->Get_Location() == actor->Work_Location())
+					task->location_type = { NULL, NULL, actor->trasnport_work, NULL, NULL };
+				}
+				else if (actor->public_work != NULL)
+				{
+					task->location_type = { actor->public_work, NULL, NULL, NULL, NULL };
+				}
+				else if (actor->edu_work != NULL)
+				{
+					task->location_type = { NULL, actor->edu_work, NULL, NULL, NULL };
+				}
+				else if (actor->gen_work != NULL)
+				{
+					task->location_type = { NULL, NULL, NULL, NULL, actor->gen_work };
+				}
+
+				/*
+				bool found = false;
+				int a = 0;
+				for (int i = 0; i < m_tiles[tile_num]->Generic_work.size(); i++)
+				{
+					if (std::find(m_tiles[tile_num]->Generic_work[i]->Get_employees().begin(), m_tiles[tile_num]->Generic_work[i]->Get_employees().end(), actor) != m_tiles[tile_num]->Generic_work[i]->Get_employees().end())
 					{
 						found = true;
 					}
+					a++;
 				}
 
 				if (found == true)
 				{
-					task->location_type = { NULL, NULL, NULL, NULL, m_tiles[tile_num]->Generic_work[i] };
-					if (m_tiles[tile_num]->Generic_work[i]->closed == true)
+					task->location_type = { NULL, NULL, NULL, NULL, m_tiles[tile_num]->Generic_work[a] };
+					if (m_tiles[tile_num]->Generic_work[a]->closed == true)
 					{
 						delete task;
 						continue;
@@ -146,18 +155,19 @@ void Director::world_task(mandatory_task task)
 				}
 				else
 				{
-					i = 0;
-					for (i < m_tiles[tile_num]->edu_buildings.size(); i++;)
+					a = 0;
+					for (int i = 0; i < m_tiles[tile_num]->edu_buildings.size(); i++)
 					{
 						if (m_tiles[tile_num]->edu_buildings[i]->Get_Location() == actor->Work_Location())
 						{
 							found = true;
 						}
+						a++;
 					}
 					if (found == true)
 					{
-						task->location_type = { NULL, m_tiles[tile_num]->edu_buildings[i], NULL, NULL, NULL };
-						if (m_tiles[tile_num]->edu_buildings[i]->closed == true)
+						task->location_type = { NULL, m_tiles[tile_num]->edu_buildings[a], NULL, NULL, NULL };
+						if (m_tiles[tile_num]->edu_buildings[a]->closed == true)
 						{
 							delete task;
 							continue;
@@ -165,18 +175,19 @@ void Director::world_task(mandatory_task task)
 					}
 					else
 					{
-						i = 0;
-						for (i < m_tiles[tile_num]->Pub_buildings.size(); i++;)
+						a = 0;
+						for (int i = 0; i < m_tiles[tile_num]->Pub_buildings.size(); i++)
 						{
 							if (m_tiles[tile_num]->Pub_buildings[i]->Get_Location() == actor->Work_Location())
 							{
 								found = true;
 							}
+							a++;
 						}
 						if (found == true)
 						{
-							task->location_type = { m_tiles[tile_num]->Pub_buildings[i], NULL, NULL, NULL, NULL };
-							if (m_tiles[tile_num]->Pub_buildings[i]->closed == true)
+							task->location_type = { m_tiles[tile_num]->Pub_buildings[a], NULL, NULL, NULL, NULL };
+							if (m_tiles[tile_num]->Pub_buildings[a]->closed == true)
 							{
 								delete task;
 								continue;
@@ -184,21 +195,23 @@ void Director::world_task(mandatory_task task)
 						}
 						else
 						{
-							int i = 0;
-							for (i < m_tiles[tile_num]->public_transport.size(); i++;)
+							a = 0;
+							for (int i = 0; i < m_tiles[tile_num]->public_transport.size(); i++)
 							{
 								if (m_tiles[tile_num]->public_transport[i]->Get_Location() == actor->Work_Location())
 								{
 									found = true;
 								}
+								a++;
 							}
 							if (found == true)
 							{
-								task->location_type = { NULL, NULL, m_tiles[tile_num]->public_transport[i], NULL, NULL };
+								task->location_type = { NULL, NULL, m_tiles[tile_num]->public_transport[a], NULL, NULL };
 							}
 						}
 					}
 				}
+				*/
 
 				task->location = actor->Work_Location();
 
@@ -214,7 +227,7 @@ void Director::world_task(mandatory_task task)
 					delete task;
 				}
 			}
-			else if (task == mandatory_task::idle)
+			else if (task_type == mandatory_task::idle)
 			{
 			mandatorytask = false;
 				int x = 0;
@@ -240,7 +253,7 @@ void Director::world_task(mandatory_task task)
 			}
 		}
 	}
-	else if (task == mandatory_task::sleep)
+	else if (task_type == mandatory_task::sleep)
 	{
 		mandatorytask = false;
 		if (sleep_active == false)
@@ -268,6 +281,7 @@ void Director::run_tasks()
 				if (agent->A_star_found == false)
 				{
 					delete std::get<0>(m_current_tasks[i]);
+					agent->set_state(Actor::idle);
 					m_current_tasks.erase(m_current_tasks.begin() + i);
 					log_tasks.LogFucntion(Log::LogLevelWarning, 4);
 					failed++;
@@ -288,6 +302,7 @@ void Director::run_tasks()
 			if (std::get<0>(m_current_tasks[i])->run_time == std::get<0>(m_current_tasks[i])->task_length && mandatorytask == false)
 			{
 				change_actor_location(agent, *std::get<0>(m_current_tasks[i]), true);
+				agent->set_state(Actor::idle);
 				agent->task_dest = false;
 				m_current_tasks.erase(m_current_tasks.begin() + i);
 				//m_idle.push_back(agent);
@@ -529,6 +544,10 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 		bool empty_vec = true;
 		int random_vec;
 		std::vector<unsigned int> used_numbers = {};
+		if (public_buildings_tile.size() == 0)
+		{
+			return { {0,0,0}, NULL };
+		}
 		while (empty_vec == true)
 		{
 			random_vec = Random::random_number(0, public_buildings_tile.size() - 1, used_numbers);
@@ -580,9 +599,9 @@ std::vector<double> Director::task_weight_vector(const std::vector<std::tuple<Ta
 		}
 	}
 
-	double a = (1 - extra_prob) / task_vector.size();
+	double a = (1 - extra_prob) / 6;
 
-	for (int i = 0; i < task_vector.size(); i++)
+	for (int i = 0; i < 6; i++)
 	{
 		if (std::find(extra.begin(), extra.end(), i) == extra.end())
 		{
@@ -642,6 +661,15 @@ void Director::request_task(Actor* requestee)
 		int tile_number = std::get<2>(requestee->Get_Location());
 		auto [location, building] = public_task_setup(tile_number, (Tasks::Destination_Types)task_value);
 		int task_length = Random::random_number(20, 300, {});
+		if (building == NULL)
+		{
+			int num = Random::random_number(0, 1, {});
+			if (num == 1)
+			{
+				go_home(requestee);
+			}
+			return;
+		}
 		if (building->closed == true)
 		{
 			return;
@@ -672,16 +700,8 @@ void Director::request_task(Actor* requestee)
 void Director::go_home(Actor* requestee)
 {
 	Task* task = new Task;
-	auto [x, y, tile_num] = requestee->House_Location();
-	House* home = NULL;
-	for (int i = 0; i < m_tiles[tile_num]->Houses.size(); i++)
-	{
-		if (m_tiles[tile_num]->Houses[i]->Get_Location() == requestee->House_Location())
-		{
-			home = m_tiles[tile_num]->Houses[i];
-		}
-	}
-	task->location_type = { NULL, NULL, NULL, home, NULL };
+	
+	task->location_type = { NULL, NULL, NULL, requestee->Home, NULL };
 	task->location = requestee->House_Location();
 
 	requestee->set_state(Actor::waiting);

@@ -118,7 +118,7 @@ void Model::RunModel()
 			transport_buildings_vec.push_back(&Airport[i]);
 		}
 
-		Model_Data model_data;
+		static Model_Data model_data;
 		
 		int col_numbers = std::ceil(std::sqrt(RunModel.Num_Of_Tiles));
 		int row_numbers = std::ceil((double)RunModel.Num_Of_Tiles / (double)col_numbers);
@@ -210,8 +210,11 @@ void Model::RunModel()
 			{
 				x = Random::random_number(0, model_data.sucept.size(), {});
 				actor_vec[x]->name = get_names()[0];
-				model_data.infected.push_back(model_data.sucept[x]);
-				model_data.infected[i]->set_stage(Actor::infect);
+				actor_vec[x]->set_infectivity(get_infect());
+				actor_vec[x]->set_recovery(get_recover());
+				model_data.latent.push_back(model_data.sucept[x]);
+				model_data.latent[i]->set_stage(Actor::latent);
+				model_data.latent[i]->set_mortality(calculations::calc_mortaility(model_data.latent[i]->Get_age(), model_data.latent[i]->medical, model_data.latent[i]->race));
 				model_data.sucept.erase(model_data.sucept.begin() + x);
 			}
 
@@ -347,9 +350,10 @@ void Model::RunModel()
 						else
 						{
 							actor_vec[i]->idle_counts++;
-							actor_vec[i]->set_location_state(Actor::outside);
-							if (Random::random_number(0, 2, {}) == 1)
+							std::vector<unsigned int> weight = { 50,50 };
+							if (Random::Discrete_distribution(weight, 1)[0] == 1)
 							{
+								actor_vec[i]->set_location_state(Actor::outside);
 								actor_vec[i]->random_walk();
 							}
 						}
@@ -421,14 +425,28 @@ void Model::RunModel()
 
 			std::sort(infected_vector.begin(), infected_vector.end(), functions::sortbysec);
 
-			int removed_actors = 0;
 			int size = infected_vector.size();
+			int removed_actors = 0;
 			for (int i = 0; i < size; i++)
 			{
-				model_data.sucept[i - removed_actors]->set_stage(Actor::infect);
-				model_data.infected.push_back(model_data.sucept[i - removed_actors]);
-				model_data.sucept.erase(model_data.sucept.begin() + i - removed_actors);
+				int place = infected_vector[i].second;
+				model_data.latent.push_back(model_data.sucept[place - removed_actors]);
+				model_data.sucept[place - removed_actors]->set_stage(Actor::latent);
+				model_data.sucept.erase(model_data.sucept.begin() + place - removed_actors);
 				removed_actors++;
+			}
+
+			int latent_size = model_data.latent.size();
+			for (int i = 0; i < latent_size; i++)
+			{
+				model_data.latent[i]->infection_length++;
+				if (model_data.latent[i]->infection_length >= get_latent_time())
+				{
+					model_data.infected.push_back(model_data.latent[i - removed_actors]);
+					model_data.latent[i - removed_actors]->set_stage(Actor::infect);
+					model_data.latent.erase(model_data.latent.begin() + i - removed_actors );
+					removed_actors++;
+				}
 			}
 
 			model_data.now_infected = model_data.infected.size();
@@ -436,15 +454,18 @@ void Model::RunModel()
 			std::vector<int> removed;
 			for (int i = 0; i < model_data.infected.size(); i++)
 			{
-				if (model_data.infected[i]->get_hospilization_risk() == 0)
+				model_data.infected[i]->infection_length++;
+				if (model_data.infected[i]->get_infectivity_risk() == 0)
 				{
-					model_data.infected[i]->set_hostpilization_risk(0); //temp
-					model_data.infected[i]->set_recovery(0); //temp
-					model_data.infected[i]->set_mortality(0);
+					model_data.infected[i]->set_infectivity(get_infect());
+					model_data.infected[i]->set_recovery(get_recover()); //temp
+					model_data.infected[i]->set_mortality(calculations::calc_mortaility(model_data.infected[i]->Get_age(), model_data.infected[i]->medical, model_data.infected[i]->race));
 				}
-				if (model_data.infected[i]->symptoms == false || model_data.infected[i]->show_symptoms() == false)
+				if (model_data.infected[i]->symptoms == false)
 				{
-					continue;
+					bool symp = true;
+					symp = model_data.infected[i]->show_symptoms();
+					if (symp == false) { continue; }
 				}
 				else
 				{
@@ -492,7 +513,6 @@ void Model::RunModel()
 			patients.clear();
 			//output
 			std::thread output(functions::write_to_file, model_data, filename_new);
-			if (count != model_data.counts - 1) { output.detach(); }
 
 			for (int i = 0; i < tiles_vec.size(); i++)
 			{
@@ -502,25 +522,80 @@ void Model::RunModel()
 				}
 				for (int e = 0; e < tiles_vec[i]->edu_buildings.size(); e++)
 				{
-					tiles_vec[i]->Pub_buildings[e]->check_closed();
+					tiles_vec[i]->edu_buildings[e]->check_closed();
 				}
 				for (int e = 0; e < tiles_vec[i]->Generic_work.size(); e++)
 				{
-					tiles_vec[i]->Pub_buildings[e]->check_closed();
+					tiles_vec[i]->Generic_work[e]->check_closed();
+				}
+			}
+
+			bool correct = false;
+			int right = 0;
+			while (correct == false)
+			{
+				for (int i = 0; i < model_data.sucept.size(); i++)
+				{
+					if (model_data.sucept[i]->stage_check() != Actor::sucept)
+					{
+						if (model_data.sucept[i]->stage_check() == Actor::latent)
+						{
+							model_data.latent.push_back(model_data.sucept[i]);
+						}
+						else if (model_data.sucept[i]->stage_check() == Actor::infect)
+						{
+							model_data.infected.push_back(model_data.sucept[i]);
+						}
+						model_data.sucept.erase(model_data.sucept.begin() + i);
+						break;
+					}
+					else
+					{
+						right++;
+					}
+				}
+
+				for (int i = 0; i < model_data.latent.size(); i++)
+				{
+					if (model_data.latent[i]->stage_check() != Actor::latent)
+					{
+						if (model_data.latent[i]->stage_check() == Actor::sucept)
+						{
+							model_data.sucept.push_back(model_data.latent[i]);
+						}
+						else if (model_data.latent[i]->stage_check() == Actor::infect)
+						{
+							model_data.infected.push_back(model_data.latent[i]);
+						}
+						model_data.latent.erase(model_data.sucept.begin() + i);
+						break;
+					}
+					else
+					{
+						right++;
+					}
+				}
+
+				if (right == model_data.latent.size() + model_data.sucept.size())
+				{
+					correct = true;
 				}
 			}
 			//functions::write_to_file(model_data, filename_new);
 			count++;
 			day_count++;
 			//std::cout << count << std::endl;
-			if (count == model_data.counts)
-			{
-				output.join();
-			}
+			output.join();
 		}
 		model_end = true;
-		getagent.join();
 		std::cout << "Model Finished" << std::endl;
+		std::cout << "clear page" << std::endl;
+		getagent.join();
+		if (exit == false)
+		{
+			std::cout << "Press escape" << std::endl;
+			escape.join();
+		}
 		model_log.LogFucntion(Log::LogLevelInfo, 5);
 
 		//clean up code
@@ -585,10 +660,15 @@ void Model::Infection_check_outside(std::vector<Actor*>& sucept, std::vector<Act
 		for (int a = 0; a < sucept.size(); a++)
 		{
 			auto [x1, y1, tile_num] = sucept[a]->Get_Location();
-			if (tile_num == tile && sucept[a]->get_location() == Actor::outside && sucept[a]->state_check() == Actor::sucept)
+			if (tile_num == tile && sucept[a]->get_location() == Actor::outside && sucept[a]->stage_check() == Actor::sucept)
 			{
 				std::pair<int, int> location = { x1, y1 };
-				if (std::find(infection_circle.begin(), infection_circle.end(), location) != infection_circle.end())
+				std::vector<Actor*> temp;
+				for (auto it : return_vector)
+				{
+					temp.push_back(it.first);
+				}
+				if (std::find(infection_circle.begin(), infection_circle.end(), location) != infection_circle.end() && std::find(temp.begin(), temp.end(), sucept[a]) == temp.end())
 				{
 					bool infection = false;
 					double infection_chance = calculations::infection_prob(infected[i]->get_infectivity_risk(), infected[i]->get_severity());
@@ -651,9 +731,12 @@ void Model::hospital_infection(std::vector<Actor*>& sucept, std::vector<Actor*>&
 				std::vector<double> weight_vector = { infection_prob, 1 - infection_prob };
 				if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 				{
-					int x = 0;
-					functions::find_in_vec(sucept, x, Hospital[i]->Get_people_currently_in_buildling()[e]);
-					return_vector.push_back(std::make_pair(sucept[x], x));
+					std::pair<int, bool> out;
+					out = functions::find_in_vec(sucept, Hospital[i]->Get_people_currently_in_buildling()[e]);
+					if (out.second == true)
+					{
+						return_vector.push_back(std::make_pair(sucept[out.first], out.first));
+					}
 					//sucept[x]->set_stage(Actor::infect);
 					//infected_vec.push_back(sucept[x]);
 					//sucept.erase(sucept.begin() + x);
@@ -705,9 +788,12 @@ void Model::transport_building_infection(std::vector<Actor*>& sucept, std::vecto
 				std::vector<double> weight_vector = { infection_prob, 1 - infection_prob };
 				if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 				{
-					int x = 0;
-					functions::find_in_vec(sucept, x, building[i]->Get_people_currently_in_building()[e]);
-					return_vector.push_back(std::make_pair(sucept[x], x));
+					std::pair<int, bool> out;
+					out = functions::find_in_vec(sucept, building[i]->Get_people_currently_in_building()[e]);
+					if (out.second == true)
+					{
+						return_vector.push_back(std::make_pair(sucept[out.first], out.first));
+					}
 				}
 			}
 		}
@@ -721,7 +807,7 @@ void Model::transport_infection(std::vector<Actor*>& sucept, std::vector<Actor*>
 	std::vector<std::pair<Actor*, int>> infect_vec;
 	for (int i = 0; i < infected.size(); i++)
 	{
-		if (infected[i]->state_check() != Actor::in_transit)
+		if (infected[i]->state_check() != Actor::transit)
 		{
 			continue;
 		}
@@ -743,7 +829,7 @@ void Model::transport_infection(std::vector<Actor*>& sucept, std::vector<Actor*>
 
 	for (int i = 0; i < sucept.size(); i++)
 	{
-		if (sucept[i]->stage_check() == Actor::sucept && sucept[i]->state_check() == Actor::in_transit)
+		if (sucept[i]->stage_check() == Actor::sucept && sucept[i]->state_check() == Actor::transit)
 		{
 			double infection_chance = calculations::infection_prob(infection, Actor::default_severity);
 			infection_chance = infection_chance * modifier;
@@ -798,9 +884,12 @@ void Model::education_building_infection(std::vector<Actor*>& sucept, std::vecto
 				std::vector<double> weight_vector = { infection_prob, 1 - infection_prob };
 				if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 				{
-					int x = 0;
-					functions::find_in_vec(sucept, x, building[i]->Get_people_currently_in_buildling()[e]);
-					return_vector.push_back(std::make_pair(sucept[x], x));
+					std::pair<int, bool> out;
+					out = functions::find_in_vec(sucept, building[i]->Get_people_currently_in_buildling()[e]);
+					if (out.second == true)
+					{
+						return_vector.push_back(std::make_pair(sucept[out.first], out.first));
+					}
 				}
 			}
 		}
@@ -848,9 +937,12 @@ void Model::work_building_infection(std::vector<Actor*>& sucept, std::vector<Act
 				std::vector<double> weight_vector = { infection_prob, 1 - infection_prob };
 				if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 				{
-					int x = 0;
-					functions::find_in_vec(sucept, x, building[i]->Get_people_currently_in_buildling()[e]);
-					return_vector.push_back(std::make_pair(sucept[x], x));
+					std::pair<int, bool> out;
+					out = functions::find_in_vec(sucept, building[i]->Get_people_currently_in_buildling()[e]);
+					if (out.second == true)
+					{
+						return_vector.push_back(std::make_pair(sucept[out.first], out.first));
+					}
 				}
 			}
 		}
@@ -898,9 +990,12 @@ void Model::home_building_infection(std::vector<Actor*>& sucept, std::vector<Act
 				std::vector<double> weight_vector = { infection_prob, 1 - infection_prob };
 				if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 				{
-					int x = 0;
-					functions::find_in_vec(sucept, x, building[i]->Get_people_currently_in_buildling()[e]);
-					return_vector.push_back(std::make_pair(sucept[x], x));
+					std::pair<int, bool> out;
+					out = functions::find_in_vec(sucept, building[i]->Get_people_currently_in_buildling()[e]);
+					if (out.second == true)
+					{
+						return_vector.push_back(std::make_pair(sucept[out.first], out.first));
+					}
 				}
 			}
 		}
@@ -948,9 +1043,12 @@ void Model::building_infection(std::vector<Actor*>& sucept, std::vector<Actor*>&
 				std::vector<double> weight_vector = { infection_prob, 1 - infection_prob };
 				if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 				{
-					int x = 0;
-					functions::find_in_vec(sucept, x, building[i]->Get_people_currently_in_buildling()[e]);
-					return_vector.push_back(std::make_pair(sucept[x], x));
+					std::pair<int, bool> out;
+					out = functions::find_in_vec(sucept, building[i]->Get_people_currently_in_buildling()[e]);
+					if (out.second == true) 
+					{
+						return_vector.push_back(std::make_pair(sucept[out.first], out.first));
+					}
 				}
 			}
 		}
@@ -1133,69 +1231,87 @@ std::vector<std::pair<int, int>> functions::generate_circle(unsigned int radius,
 	return points;
 }
 
-bool functions::find_in_vec(const std::vector<Actor*>& vector, int& position, const Actor* value)
+std::pair<int, bool> functions::find_in_vec(const std::vector<Actor*>& vector, const Actor* value)
 {
 	bool found = false;
+	int position = 0;
 	while (found == false)
 	{
 		if (position == vector.size())
 		{
-			return false;
+			return std::make_pair(position, false);
 		}
 		else if (value == vector[position])
 		{
-			return true;
+			return std::make_pair(position, true);
 		}
 		else
 		{
 			position++;
 		}
 	}
-	return false;
+	return std::make_pair(position, false);
 }
 
 void functions::write_to_file(const Model_Data& data, std::string filename)
 {
 	std::fstream output_file;
 	std::filesystem::path p(filename);
-	filename = "Output/" + p.stem().string() + ".cvo";
+	filename = "Output/" + p.stem().string();
 
-	output_file.open(filename, std::ios::out | std::ios::app);
-
-	if (output_file.is_open())
+	if (data.R0 == 1)
 	{
-		if (data.R0 == 1)
+		output_file.open(filename + " R0.cvo", std::ios::out | std::ios::app);
+		if (data.previous_infected == 0)
+		{
+			output_file << "0" << std::endl;
+		}
+		else
 		{
 			output_file << std::to_string(calculations::R_0(data.previous_infected, data.now_infected)) << std::endl;
 		}
-		if (data.Sucept == 1)
-		{
-			output_file << std::to_string(data.sucept.size()) << std::endl;
-		}
-		if (data.Infected == 1)
-		{
-			output_file << data.infected.size() << std::endl;
-		}
-		if (data.Rec == 1)
-		{
-			output_file << data.recovered.size() << std::endl;
-		}
-		if (data.Host == 1)
-		{
-			output_file << data.hostipilized.size() << std::endl;
-		}
-		if (data.Dead == 1)
-		{
-			output_file << data.dead.size() << std::endl;
-		}
-		if (data.mortality == 1)
-		{
-			output_file << calculations::rate(data.total, data.previous_dead, data.now_dead);
-		}
-		if (data.morbidity == 1)
-		{
-			output_file << calculations::rate(data.total, data.previous_infected, data.now_infected);
-		}
+		output_file.close();
+	}
+	if (data.Sucept == 1)
+	{
+		output_file.open(filename + " succept.cvo", std::ios::out | std::ios::app);
+		output_file << std::to_string(data.sucept.size()) << std::endl;
+		output_file.close();
+	}
+	if (data.Infected == 1)
+	{
+		output_file.open(filename + " infected.cvo", std::ios::out | std::ios::app);
+		output_file << std::to_string(data.infected.size()) << std::endl;
+		output_file.close();
+	}
+	if (data.Rec == 1)
+	{
+		output_file.open(filename + " recovered.cvo", std::ios::out | std::ios::app);
+		output_file << std::to_string(data.recovered.size()) << std::endl;
+		output_file.close();
+	}
+	if (data.Host == 1)
+	{
+		output_file.open(filename + " host.cvo", std::ios::out | std::ios::app);
+		output_file << std::to_string(data.hostipilized.size()) << std::endl;
+		output_file.close();
+	}
+	if (data.Dead == 1)
+	{
+		output_file.open(filename + " dead.cvo", std::ios::out | std::ios::app);
+		output_file << std::to_string(data.dead.size()) << std::endl;
+		output_file.close();
+	}
+	if (data.mortality == 1)
+	{
+		output_file.open(filename + " mortality.cvo", std::ios::out | std::ios::app);
+		output_file << std::to_string(calculations::rate(data.total, data.previous_dead, data.now_dead)) << std::endl;
+		output_file.close();
+	}
+	if (data.morbidity == 1)
+	{
+		output_file.open(filename + " morbidity.cvo", std::ios::out | std::ios::app);
+		output_file << std::to_string(calculations::rate(data.total, data.previous_infected, data.now_infected)) << std::endl;
 		output_file.close();
 	}
 	//std::cout << "task finished" << std::endl;
@@ -1205,6 +1321,7 @@ bool functions::sortbysec(const std::pair<Actor*, int>& a, const std::pair<Actor
 {
 	return (a.second < b.second);
 }
+
 
 bool functions::remove_from_building(Actor* agent, std::vector<Tile*> tile_vec)
 {

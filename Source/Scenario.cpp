@@ -134,16 +134,16 @@ bool Scenario::ScenarioImport(World_Infomation& infomation, Population_Pyramid& 
 	adult.other_disease = adult_medical[11];
 	adult.no_known_disease = adult_medical[12];
 
-	std::vector<unsigned int> output = Chunked_Data("Output_Data", ScenarioFile, 9, int_check);
-	param.count = output[0];
-	param.R0 = output[1];
-	param.Suceptable = output[2];
-	param.Infected = output[3];
-	param.Recovered = output[4];
-	param.Hostipilized = output[5];
-	param.Dead = output[6];
-	param.mortality_rate = output[7];
-	param.morbidity_rate = output[8];
+	param.count = SingleVar("Scenario parameters", ScenarioFile, int_check);
+	std::vector<unsigned int> output = Chunked_Data("Output_Data", ScenarioFile, 8, int_check);
+	param.R0 = output[0];
+	param.Suceptable = output[1];
+	param.Infected = output[2];
+	param.Recovered = output[3];
+	param.Hostipilized = output[4];
+	param.Dead = output[5];
+	param.mortality_rate = output[6];
+	param.morbidity_rate = output[7];
 
 	std::vector<double> poll = Chunked_Data("Social_Distance_policies", ScenarioFile, 7, double_check);
 	policies.L1 = poll[0];
@@ -2127,6 +2127,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 					for (auto actor : family_groups[houses_built + i])
 					{
 						actor->set_home_location(home->Get_Location());
+						actor->Home = home;
 						home->add_people_buiding(actor);
 					}
 					houses.push_back(home);
@@ -2159,26 +2160,36 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 		case 0:
 			population_list[i].Age(Actor::zero_to_four);
 			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::zero_to_four, medical_child[medical_child_value], population_race[i]));
+			population_list[i].medical = medical_child[medical_child_value];
+			population_list[i].race = population_race[i];
 			medical_child_value++;
 			break;
 		case 1:
 			population_list[i].Age(Actor::five_to_seventeen);
 			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::five_to_seventeen, medical_child[medical_child_value], population_race[i]));
+			population_list[i].medical = medical_child[medical_child_value];
+			population_list[i].race = population_race[i];
 			medical_child_value++;
 			break;
 		case 2:
 			population_list[i].Age(Actor::eighteen_to_fortynine);
 			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::eighteen_to_fortynine, medical_adult[medical_adult_value], population_race[i]));
+			population_list[i].medical = medical_adult[medical_adult_value];
+			population_list[i].race = population_race[i];
 			medical_adult_value++;
 			break;
 		case 3:
 			population_list[i].Age(Actor::fifty_to_sixtyfour);
 			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::fifty_to_sixtyfour, medical_adult[medical_adult_value], population_race[i]));
+			population_list[i].medical = medical_adult[medical_adult_value];
+			population_list[i].race = population_race[i];
 			medical_adult_value++;
 			break;
 		case 4:
 			population_list[i].Age(Actor::sixtyfive_plus);
 			population_list[i].set_hostpilization_risk(calculations::calc_susceptibility(Actor::sixtyfive_plus, medical_adult[medical_adult_value], population_race[i]));
+			population_list[i].medical = medical_adult[medical_adult_value];
+			population_list[i].race = population_race[i];
 			medical_adult_value++;
 			break;
 		default:
@@ -2210,6 +2221,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				{
 					primary_school[e].add_students(population_list[i]);
 					population_list[i].set_work_location(primary_school[e].Get_Location());
+					population_list[i].edu_work = &primary_school[e];
 					place_found = true;
 					break;
 				}
@@ -2217,6 +2229,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				{
 					secondary_school[e].add_students(population_list[i]);
 					population_list[i].set_work_location(secondary_school[e].Get_Location());
+					population_list[i].edu_work = &secondary_school[e];
 					place_found = true;
 					break;
 				}
@@ -2241,6 +2254,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				{
 					further_education[e].add_students(population_list[i]);
 					population_list[i].set_work_location(further_education[e].Get_Location());
+					population_list[i].edu_work = &further_education[e];
 					place_found = true;
 					break;
 				}
@@ -2266,6 +2280,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 			{
 				iterator->add_staff(*job_applicable[0]);
 				job_applicable[0]->set_work_location(iterator->Get_Location());
+				job_applicable[0]->public_work = iterator;
 				job_applicable.erase(job_applicable.begin());
 				job_found = true;
 				break;
@@ -2279,6 +2294,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				{
 					iterator->add_Staff(*job_applicable[0]);
 					job_applicable[0]->set_work_location(iterator->Get_Location());
+					job_applicable[0]->edu_work = iterator;
 					job_applicable.erase(job_applicable.begin());
 					job_found = true;
 					break;
@@ -2293,6 +2309,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				{
 					iterator->add_staff(*job_applicable[0]);
 					job_applicable[0]->set_work_location(iterator->Get_Location());
+					job_applicable[0]->trasnport_work = iterator;
 					job_applicable.erase(job_applicable.begin());
 					break;
 				}
@@ -2350,6 +2367,7 @@ void Scenario::CreateModel(Tile tile[], World_Infomation& infomation_values, Pop
 				{
 					work_places[work_slot]->add_employees(*job_applicable[i]);
 					job_applicable[i]->set_work_location(work_places[work_slot]->Get_Location());
+					job_applicable[i]->gen_work == work_places[work_slot];
 					place_found = true;
 				}
 				else
