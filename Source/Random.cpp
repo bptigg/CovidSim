@@ -10,12 +10,12 @@ std::vector<unsigned int> Random::Discrete_distribution(std::vector<unsigned int
 	
 	for (auto num : weights)
 	{
-		if (num < 0 || num > 1)
+		if (num < 0 || num > 100)
 		{
 			weights.clear();
 			for (int i = 0; i < weights.size(); i++)
 			{
-				weights.push_back(0.25);
+				weights.push_back(25);
 			}
 			break;
 		}
@@ -42,14 +42,16 @@ std::vector<unsigned int> Random::Discrete_distribution(std::vector<double>& wei
 	std::string time = get_time.GetCurrentTime();
 	std::seed_seq stime(time.begin(), time.end());
 
+
+	int size = weights.size();
 	for (auto num : weights)
 	{
 		if (num < 0 || num > 1)
 		{
 			weights.clear();
-			for (int i = 0; i < weights.size(); i++)
+			for (int i = 0; i < size; i++)
 			{
-				weights.push_back(0.25);
+				weights.push_back((1/size));
 			}
 			break;
 		}
@@ -73,6 +75,11 @@ unsigned int Random::random_number(int min, int max, std::vector<unsigned int> u
 	std::default_random_engine gen;
 	std::uniform_int_distribution<int> random(min, max);
 	bool number_found = false;
+
+	Log get_time(Log::LogLevelInfo);
+	std::string time = get_time.GetCurrentTime();
+	std::seed_seq stime(time.begin(), time.end());
+	gen.seed(stime);
 
 	while (number_found == false)
 	{

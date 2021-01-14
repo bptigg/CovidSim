@@ -19,6 +19,7 @@ struct Model_Data
 
 	//SIRHD
 	std::vector<Actor*> sucept;
+	std::vector<Actor*> latent;
 	std::vector<Actor*> infected;
 	std::vector<Actor*> recovered;
 	std::vector<Actor*> hostipilized;
@@ -65,7 +66,7 @@ struct Model_Data
 namespace functions
 {
 	std::vector<std::pair<int, int>> generate_circle(unsigned int radius, std::pair<int, int> center);
-	bool find_in_vec(const std::vector<Actor*>& vector, int& position, const Actor* value);
+	std::pair<int, bool> find_in_vec(const std::vector<Actor*>& vector, const Actor* value);
 	void write_to_file(const Model_Data& data, std::string filename);
 	bool sortbysec (const std::pair<Actor*, int>& a, const std::pair<Actor*, int>& b);
 	bool remove_from_building(Actor* agent, std::vector<Tile*> tile_vec);

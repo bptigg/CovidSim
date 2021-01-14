@@ -1,14 +1,14 @@
-Scenario_Name: test
+Scenario_Name: scenario_test
 World_Infomation
 
 Tile_Size(meters)
-20
+50
 
 Num_of_tiles
-10
+1
 
 Num_of_Unique_Buildings
-10
+14
 
 Unique_Buildings
 Public_Services
@@ -17,268 +17,223 @@ Num_of_Primary Schools
 2
 
 Primary Schools 1
-1
-1
-1
-9
-50
+2
+30
+0
+20
+300
 
 Primary Schools 2
-6
-6
+45
 9
-20
-100
+0
+40
+600
 
 Num_of_Secondry Schools
-2
+1
 
 Secondry Schools 1
-5
-5
+25
+25
 0
-50
-1000
-
-Secondry Schools 2
-3
-3
-1
-60
-1200
+100
+2000
 
 Num_of_Universities
 1
 
 Universities 1
-5
-5
-4
-100
+10
+40
+0
+300
 5000
 
 
 Public_Services
 Num_of_Hospitals
-2
+1
 
 Hospitals 1
+20
+35
 0
-0
-4
-50
-500
-
-Hospitals 2
-10
-10
-9
-60
-600
+200
+1000
 
 Num_of_Places of Worship
-1
-
-Places of Worship 1
-5
-5
-1
-5
-100
+0
 
 Num_of_Restuarants
-1
+2
 
 Restuarants 1
-8
-8
-5
+23
+34
+0
 20
-60
+30
+
+Restuarants 2
+45
+43
+0
+10
+25
 
 Num_of_Cinemas
-1
-
-Cinemas 1
-5
-5
-8
-20
-200
+0
 
 Num_of_Shopping centers
 1
 
 Shopping centers 1
+32
+45
 0
-0
-2
-60
+200
 2000
 
 Num_of_Parks
 1
 
 Parks 1
-3
-8
-9
-20
-500
+27
+38
+0
+50
+10000
 
 
 Public_Transport
 
 Bus Network
 Number of Bus stops/station
-2
+5
 Bus_stop 1
 Type
-0
-4
-3
 1
 0
+0
+0
+20
 
 Bus_stop 2
 Type
 0
-8
-8
-1
+24
+25
+0
+0
+
+Bus_stop 3
+Type
+0
+34
+47
+0
+0
+
+Bus_stop 4
+Type
+0
+45
+49
+0
+0
+
+Bus_stop 5
+Type
+0
+10
+40
+0
 0
 
 Bus_Network_adjacency_matrix
-0 5 
-5 0 
+0 10 20 25 15 
+10 0 34 25 12 
+20 34 0 10 15 
+25 25 10 0 17 
+15 12 15 17 0 
 
 
 Train Network
 Number of Train stations
-2
-Train_station 1
-Type
 0
-5
-4
-4
-20
-
-Train_station 2
-Type
-0
-5
-4
-9
-20
-
 Train_Network_adjacency_matrix
-0 10 
-10 0 
 
 Airports
 Number_of_airports
-1
-Airport 1
-1
-10
 0
-50
-
 
 Metro Network
 Number of Metro stations
-3
-Metro_station 1
-Type
 0
-2
-2
-3
-0
-
-Metro_station 2
-Type
-0
-5
-5
-2
-0
-
-Metro_station 3
-Type
-0
-0
-8
-3
-0
-
 Metro_Network_adjacency_matrix
-0 1 2
-3 4 6
-7 8 9
 
 Scenario_Infomation
 Population_data
 Size_of_Population
-20000
+10000
 Population_Pyramind_(%)
-10
-20
-30
-20
-20
-Population_race_data (%)
-45
-35
 15
-5
+20
+25
+20
+10
+Population_race_data (%)
+25
+25
+25
+25
 Child_medical_data (%)
 10
 10
-10
-10
-10
-10
-10
-10
-10
 20
-10
-10
-10
+5
+0
+2
+5
+7
+1
+5
+9
+30
+50
 Adult_medical_data (%)
 10
-20
+23
 45
-58
-52
-52
-58
-62
-58
-63
-57
-10
-52
+2
+1
+5
+3
+2
+9
+25
+1
+23
+42
 Scenario parameters
+20000
 Output_Data
-43200
 1
 1
-0
 1
-0
-0
+1
+1
+1
 1
 1
 
 Social_Distance_policies
-10
-20
-30
-40
-50
+12
+24
+36
+48
 60
-70
+72
+84
 

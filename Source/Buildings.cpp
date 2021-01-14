@@ -212,7 +212,7 @@ House::~House()
 
 std::vector<Actor*> House::Get_occupants()
 {
-	return std::vector<Actor*>();
+	return m_occupants;
 }
 
 Generic_work::Generic_work()

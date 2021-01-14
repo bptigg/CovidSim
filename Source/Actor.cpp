@@ -548,8 +548,8 @@ bool Actor::show_symptoms()
 	
 	if (Random::Discrete_distribution(weight_vector, 1)[0] == 0)
 	{
-		return true;
 		symptoms = true;
+		return true;
 	}
 	return false;
 }
