@@ -59,7 +59,7 @@ public:
 	
 	void request_task(Actor* requestee);
 	void go_home(Actor* requestee);
-	void world_task(mandatory_task task);
+	void world_task(mandatory_task task, int length);
 	void run_tasks();
 	
 	void go_to_hospital(std::vector<Actor*>& patients);

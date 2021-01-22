@@ -55,23 +55,19 @@ void Director::change_actor_location(Actor* actor, Task task, bool task_end)
 		{
 			std::get<0>(task.location_type)->remove_people_building(actor);
 			actor->set_location_state(Actor::outside);
+			public_Buildings->assigned_tasks = public_Buildings->assigned_tasks - 1;
 			return;
 		}
 		if (education_Buildings != NULL)
 		{
 			std::get<1>(task.location_type)->remove_people_building(actor);
 			actor->set_location_state(Actor::outside);
+			education_Buildings->assigned_tasks = education_Buildings->assigned_tasks - 1;
 			return;
 		}
 		if (public_transport_building != NULL)
 		{
 			std::get<2>(task.location_type)->add_people_buiding(actor);
-			actor->set_location_state(Actor::outside);
-			return;
-		}
-		if (house != NULL)
-		{
-			std::get<3>(task.location_type)->add_people_buiding(actor);
 			actor->set_location_state(Actor::outside);
 			return;
 		}
@@ -84,7 +80,7 @@ void Director::change_actor_location(Actor* actor, Task task, bool task_end)
 	}
 }
 
-void Director::world_task(mandatory_task task_type)
+void Director::world_task(mandatory_task task_type, int length)
 {
 	clear_task_vector();
 	mandatorytask = true;
@@ -97,6 +93,7 @@ void Director::world_task(mandatory_task task_type)
 				Task* task = new Task;
 				task->location_type = { NULL, NULL, NULL, actor->Home, NULL };
 				task->location = actor->House_Location();
+				task->task_length = length;
 
 				int delay = Random::random_number(0, 10, {});
 
@@ -106,6 +103,7 @@ void Director::world_task(mandatory_task task_type)
 			else if (task_type == mandatory_task::go_to_work)
 			{
 				Task* task = new Task;
+				task->task_length = length;
 				
 				//int x = std::get<0>(actor->Work_Location());
 				//int y = std::get<1>(actor->Work_Location());
@@ -299,7 +297,7 @@ void Director::run_tasks()
 				//m_doing_task.push_back(agent);
 				continue;
 			}
-			if (std::get<0>(m_current_tasks[i])->run_time == std::get<0>(m_current_tasks[i])->task_length && mandatorytask == false)
+			if (std::get<0>(m_current_tasks[i])->run_time == std::get<0>(m_current_tasks[i])->task_length)
 			{
 				change_actor_location(agent, *std::get<0>(m_current_tasks[i]), true);
 				agent->set_state(Actor::idle);
@@ -474,71 +472,68 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 		for (int32_t a = 0; a < m_tiles.size(); a++)
 		{
 			public_buildings.clear();
-			if (a != actor_tile)
+			switch (location_type)
 			{
-				switch (location_type)
+			case 0:
+				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
 				{
-				case 0:
-					for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
+					if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::Hospital)
 					{
-						if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::Hospital)
-						{
-							public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
-						}
+						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
 					}
-					public_buildings_tile.push_back(public_buildings);
-					break;
-				case 1:
-					for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
-					{
-						if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::Place_of_worship)
-						{
-							public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
-						}
-					}
-					public_buildings_tile.push_back(public_buildings);
-					break;
-				case 2:
-					for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
-					{
-						if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::restuarant)
-						{
-							public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
-						}
-					}
-					public_buildings_tile.push_back(public_buildings);
-					break;
-				case 3:
-					for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
-					{
-						if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::cinema)
-						{
-							public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
-						}
-					}
-					public_buildings_tile.push_back(public_buildings);
-					break;
-				case 4:
-					for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
-					{
-						if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::shopping_center)
-						{
-							public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
-						}
-					}
-					public_buildings_tile.push_back(public_buildings);
-					break;
-				case 5:
-					for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
-					{
-						if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::parks)
-						{
-							public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
-						}
-					}
-					public_buildings_tile.push_back(public_buildings);
-					break;
 				}
+				public_buildings_tile.push_back(public_buildings);
+				break;
+			case 1:
+				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
+				{
+					if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::Place_of_worship)
+					{
+						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
+					}
+				}
+				public_buildings_tile.push_back(public_buildings);
+				break;
+			case 2:
+				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
+				{
+					if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::restuarant)
+					{
+						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
+					}
+				}
+				public_buildings_tile.push_back(public_buildings);
+				break;
+			case 3:
+				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
+				{
+					if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::cinema)
+					{
+						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
+					}
+				}
+				public_buildings_tile.push_back(public_buildings);
+				break;
+			case 4:
+				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
+				{
+					if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::shopping_center)
+					{
+						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
+					}
+				}
+				public_buildings_tile.push_back(public_buildings);
+				break;
+			case 5:
+				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
+				{
+					if (m_tiles[a]->Pub_buildings[i]->Get_Type() == Public_Buildings::parks)
+					{
+						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
+					}
+				}
+				public_buildings_tile.push_back(public_buildings);
+				break;
 			}
 		}
 		bool empty_vec = true;
@@ -679,7 +674,8 @@ void Director::request_task(Actor* requestee)
 		task->location_type = { building, NULL, NULL, NULL, NULL };
 		task->location = location;
 		task->task_length = task_length;
-		if (building->Get_people_currently_in_buildling().size() == building->Get_capacity())
+		building->assigned_tasks = building->assigned_tasks + 1;
+		if (building->assigned_tasks >= building->Get_capacity() + 1)
 		{
 			delete task;
 			
