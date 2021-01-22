@@ -44,16 +44,22 @@ std::vector<unsigned int> Random::Discrete_distribution(std::vector<double>& wei
 
 
 	int size = weights.size();
+	int errors = 0;
+
 	for (auto num : weights)
 	{
 		if (num < 0 || num > 1)
 		{
-			weights.clear();
-			for (int i = 0; i < size; i++)
-			{
-				weights.push_back((1/size));
-			}
-			break;
+			errors++;
+		}
+	}
+
+	if (errors == size)
+	{
+		weights.clear();
+		for (int i = 0; i < size; i++)
+		{
+			weights.push_back((double)1 / (double)size);
 		}
 	}
 

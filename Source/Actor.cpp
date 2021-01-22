@@ -52,15 +52,18 @@ void Actor::show()
 		std::cout << "Infection Stage: " << "Succeptible" << std::endl;
 		break;
 	case 1:
-		std::cout << "Infection Stage: " << "Infected" << std::endl;
+		std::cout << "Infection Stage: " << "Latent" << std::endl;
 		break;
 	case 2:
-		std::cout << "Infection Stage: " << "Recovered" << std::endl;
+		std::cout << "Infection Stage: " << "Infected" << std::endl;
 		break;
 	case 3:
-		std::cout << "Infection Stage: " << "Hospitalized" << std::endl;
+		std::cout << "Infection Stage: " << "Recovered" << std::endl;
 		break;
 	case 4:
+		std::cout << "Infection Stage: " << "Hospitalized" << std::endl;
+		break;
+	case 5:
 		std::cout << "Infection Stage: " << "Dead" << std::endl;
 		break;
 	default:

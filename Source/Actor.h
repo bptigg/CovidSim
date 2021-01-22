@@ -90,6 +90,8 @@ public:
 	bool A_star_found = false;
 
 	int infection_length = 0;
+	int infection_time = 0; // 
+	bool infected_this_turn = false;
 	bool symptoms = false;
 	bool hospital = false;
 

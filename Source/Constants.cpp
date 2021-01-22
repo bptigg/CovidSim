@@ -114,13 +114,13 @@ double get_chance()
 	return CHANCE;
 }
 
-uint32_t MIN_AYSMPTOMATIC_PERIOD = 10080;
+uint32_t MIN_AYSMPTOMATIC_PERIOD = 10080; //10080;
 uint32_t get_min_period()
 {
 	return MIN_AYSMPTOMATIC_PERIOD;
 }
 
-uint32_t MAX_AYSMPTOMATIC_PERIOD = 20160;
+uint32_t MAX_AYSMPTOMATIC_PERIOD = 20160; //20160;
 uint32_t get_max_period()
 {
 	return MAX_AYSMPTOMATIC_PERIOD;
@@ -139,13 +139,19 @@ std::vector <std::string> get_names()
 }
 
 //COVID VALUES (CURRENTLY TEMPORARY STAND IN VALUES)
-double INFECTIVITY = 0.125;
+int INFECTION_TIME = 2;
+int get_infection_time()
+{
+	return INFECTION_TIME;
+}
+
+double INFECTIVITY = 0.25;
 double get_infect()
 {
 	return INFECTIVITY;
 }
 
-double RECOVERY = 0.1;
+double RECOVERY = 0.15;
 double get_recover()
 {
 	return RECOVERY;

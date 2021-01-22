@@ -67,6 +67,7 @@ namespace functions
 {
 	std::vector<std::pair<int, int>> generate_circle(unsigned int radius, std::pair<int, int> center);
 	std::pair<int, bool> find_in_vec(const std::vector<Actor*>& vector, const Actor* value);
+	bool check_infect(Actor* actor, std::vector<Actor*>& infect_time);
 	void write_to_file(const Model_Data& data, std::string filename);
 	bool sortbysec (const std::pair<Actor*, int>& a, const std::pair<Actor*, int>& b);
 	bool remove_from_building(Actor* agent, std::vector<Tile*> tile_vec);

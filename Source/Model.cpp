@@ -255,6 +255,8 @@ void Model::RunModel()
 		bool exit = false;
 		std::thread escape(Model::check_escape, std::ref(exit), std::ref(model_end));
 		escape.detach();
+
+		std::vector<Actor*> infection_length = {};
 		while (count != model_data.counts && exit == false)
 		{
 			//world tasks
@@ -291,20 +293,20 @@ void Model::RunModel()
 
 			if (day_count == 420 || day_count == 1320)
 			{
-				nick.world_task(Director::mandatory_task::idle);
-				nick.world_task(Director::mandatory_task::sleep);
+				nick.world_task(Director::mandatory_task::idle, 0);
+				nick.world_task(Director::mandatory_task::sleep, 0);
 			}
-			if (day_count == 480 || day_count == 840)
+			if (day_count == 480 || day_count == 780)
 			{
-				nick.world_task(Director::mandatory_task::go_to_work);
+				nick.world_task(Director::mandatory_task::go_to_work, 720 - 240);
 			}
 			if (day_count == 720 || day_count == 1020)
 			{
-				nick.world_task(Director::mandatory_task::idle);
+				nick.world_task(Director::mandatory_task::idle, 0);
 			}
 			if (day_count == 1020)
 			{
-				nick.world_task(Director::mandatory_task::go_home);
+				nick.world_task(Director::mandatory_task::go_home, 0);
 			}
 
 			if (nick.sleep_active == false)
@@ -313,6 +315,7 @@ void Model::RunModel()
 				{
 					for (int i = 0; i < actor_vec.size(); i++)
 					{
+						actor_vec[i]->infected_this_turn = false;
 						if (actor_vec[i]->stage_check() == Actor::dead)
 						{
 							continue;
@@ -350,12 +353,8 @@ void Model::RunModel()
 						else
 						{
 							actor_vec[i]->idle_counts++;
-							std::vector<unsigned int> weight = { 50,50 };
-							if (Random::Discrete_distribution(weight, 1)[0] == 1)
-							{
-								actor_vec[i]->set_location_state(Actor::outside);
-								actor_vec[i]->random_walk();
-							}
+							actor_vec[i]->set_location_state(Actor::outside);
+							actor_vec[i]->random_walk();
 						}
 					}
 				}
@@ -365,7 +364,22 @@ void Model::RunModel()
 				nick.run_tasks();
 			}
 
+			for (int i = 0; i < houses.size(); i++)
+			{
+				int occupant_size = houses[i]->Get_people_currently_in_buildling().size();
+				int removed = 0;
+				for (int e = 0; e < occupant_size; e++)
+				{
+					if (houses[i]->Get_people_currently_in_buildling()[e - removed]->Get_Location() != houses[i]->Get_people_currently_in_buildling()[e- removed]->House_Location())
+					{
+						houses[i]->remove_people_building(houses[i]->Get_people_currently_in_buildling()[e]);
+						removed++;
+					}
+				}
+			}
+
 			infected_vector.clear();
+			infected_homes.clear();
 			infected_school.clear();
 			infected_public_building.clear();
 			infected_public_transport_building.clear();
@@ -392,35 +406,74 @@ void Model::RunModel()
 				transportinfection.join();
 				outsideinfection.join();
 			}
-			Model::home_building_infection(model_data.sucept, model_data.infected, houses, infected_vector);
+			Model::home_building_infection(model_data.sucept, model_data.infected, houses, infected_homes);
 
 			for (int i = 0; i < infected_school.size(); i++)
 			{
-				infected_vector.push_back(infected_school[i]);
+				if (functions::check_infect(infected_school[i].first, infection_length) == true)
+				{
+					infected_vector.push_back(infected_school[i]);
+				}
 			}
 			for (int i = 0; i < infected_public_building.size(); i++)
 			{
-				infected_vector.push_back(infected_public_building[i]);
+				if (functions::check_infect(infected_public_building[i].first, infection_length) == true)
+				{
+					infected_vector.push_back(infected_public_building[i]);
+				}
 			}
 			for (int i = 0; i < infected_gen_work.size(); i++)
 			{
-				infected_vector.push_back(infected_gen_work[i]);
+				if (functions::check_infect(infected_gen_work[i].first, infection_length) == true)
+				{
+					infected_vector.push_back(infected_gen_work[i]);
+				}
 			}
 			for (int i = 0; i < infected_public_transport_building.size(); i++)
 			{
-				infected_vector.push_back(infected_public_transport_building[i]);
+				if (functions::check_infect(infected_public_transport_building[i].first, infection_length) == true)
+				{
+					infected_vector.push_back(infected_public_transport_building[i]);
+				}
 			}
 			for (int i = 0; i < infected_hospital.size(); i++)
 			{
-				infected_vector.push_back(infected_hospital[i]);
+				if (functions::check_infect(infected_hospital[i].first, infection_length) == true)
+				{
+					infected_vector.push_back(infected_hospital[i]);
+				}
 			}
 			for (int i = 0; i < infected_transport.size(); i++)
 			{
-				infected_vector.push_back(infected_transport[i]);
+				if (functions::check_infect(infected_transport[i].first, infection_length) == true)
+				{
+					infected_vector.push_back(infected_transport[i]);
+				}
 			}
 			for (int i = 0; i < infected_outside.size(); i++)
 			{
-				infected_vector.push_back(infected_outside[i]);
+				if (functions::check_infect(infected_outside[i].first, infection_length) == true)
+				{
+					infected_vector.push_back(infected_outside[i]);
+				}
+			}
+			for (int i = 0; i < infected_homes.size(); i++)
+			{
+				if (functions::check_infect(infected_homes[i].first, infection_length) == true)
+				{
+					infected_vector.push_back(infected_homes[i]);
+				}
+			}
+
+			int erases = 0;
+			for (int i = 0; i < infection_length.size(); i++)
+			{
+				if (infection_length[i]->infected_this_turn != true)
+				{
+					infection_length[i - erases]->infection_time = 0;
+					infection_length.erase(infection_length.begin() + i - erases);
+					erases++;
+				}
 			}
 
 			std::sort(infected_vector.begin(), infected_vector.end(), functions::sortbysec);
@@ -437,6 +490,7 @@ void Model::RunModel()
 			}
 
 			int latent_size = model_data.latent.size();
+			removed_actors = 0;
 			for (int i = 0; i < latent_size; i++)
 			{
 				model_data.latent[i]->infection_length++;
@@ -475,7 +529,7 @@ void Model::RunModel()
 					}
 				}
 
-				if (model_data.infected[i]->hospital != true)
+				if (model_data.infected[i]->hospital == true)
 				{
 					if (model_data.infected[i]->go_to_hospital() == true)
 					{
@@ -591,11 +645,6 @@ void Model::RunModel()
 		std::cout << "Model Finished" << std::endl;
 		std::cout << "clear page" << std::endl;
 		getagent.join();
-		if (exit == false)
-		{
-			std::cout << "Press escape" << std::endl;
-			escape.join();
-		}
 		model_log.LogFucntion(Log::LogLevelInfo, 5);
 
 		//clean up code
@@ -648,7 +697,6 @@ void Model::RunRandomModel()
 {
 	
 }
-
 
 void Model::Infection_check_outside(std::vector<Actor*>& sucept, std::vector<Actor*>& infected, std::vector<std::pair<Actor*, int>>& return_vector)
 {
@@ -1256,6 +1304,38 @@ std::pair<int, bool> functions::find_in_vec(const std::vector<Actor*>& vector, c
 	}
 	return std::make_pair(position, false);
 }
+
+bool functions::check_infect(Actor* actor, std::vector<Actor*>& infect_time)
+{
+	actor->infected_this_turn = true;
+	if (std::find(infect_time.begin(), infect_time.end(), actor) != infect_time.end())
+	{
+ 		if (actor->infection_time >= get_infection_time() - 1)
+		{
+			for (int e = 0; e < infect_time.size(); e++)
+			{
+				if (infect_time[e] == actor)
+				{
+					infect_time.erase(infect_time.begin() + e);
+				}
+			}
+			actor->infection_time = 0;
+			return true;
+		}
+		else
+		{
+			actor->infection_time++;
+			return false;
+		}
+	}
+	else
+	{
+		infect_time.push_back(actor);
+		return false;
+	}
+	return false;
+}
+
 
 void functions::write_to_file(const Model_Data& data, std::string filename)
 {

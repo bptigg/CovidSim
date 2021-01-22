@@ -34,6 +34,7 @@ uint32_t get_latent_time();
 
 std::vector<std::string> get_names();
 
+int get_infection_time();
 double get_infect();
 double get_recover();
 double get_hospilization_age_co(int num);

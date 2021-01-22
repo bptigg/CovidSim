@@ -9,6 +9,7 @@ class Buildings
 {
 public:
 	bool closed = false;
+	int assigned_tasks = 0;
 private:
 	int m_x = 0;
 	int m_y = 0;
