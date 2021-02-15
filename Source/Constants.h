@@ -39,3 +39,6 @@ double get_infect();
 double get_recover();
 double get_hospilization_age_co(int num);
 double get_dying_age_co(int num);
+double get_medical();
+double get_ethnicity_co(int num);
+

@@ -139,49 +139,51 @@ std::vector <std::string> get_names()
 }
 
 //COVID VALUES (CURRENTLY TEMPORARY STAND IN VALUES)
-int INFECTION_TIME = 2;
+int INFECTION_TIME = 4320;
 int get_infection_time()
 {
 	return INFECTION_TIME;
 }
 
-double INFECTIVITY = 0.25;
+double INFECTIVITY = 0.15;
 double get_infect()
 {
 	return INFECTIVITY;
 }
 
-double RECOVERY = 0.15;
+double RECOVERY = 0.2;
 double get_recover()
 {
 	return RECOVERY;
 }
 
 //hostiplization
-double CONTROL = 0.08;
-double Z_FO = 0.25;
-double FI_SE = 0.12;
-double FIF_SF = 4.0;
-double SF_PLUS = 9;
+double CONTROL = 0.5163976;
+
+double Z_FO = 0.5163976;
+double FI_SE = 0.08572764;
+double EI_FN = 1.322797;
+double FIF_SF = 2.62366;
+double SF_PLUS = 3.752829;
 
 double get_hospilization_age_co(int num)
 {
 	switch (num)
 	{
 	case 0:
-		return CONTROL * Z_FO;
+		return Z_FO;
 		break;
 	case 1:
-		return CONTROL * FI_SE;
+		return FI_SE;
 		break;
 	case 2:
 		return CONTROL;
 		break;
 	case 3:
-		return FIF_SF * CONTROL;
+		return FIF_SF;
 		break;
 	case 4:
-		return SF_PLUS * CONTROL;
+		return SF_PLUS;
 		break;
 	default:
 		return CONTROL;
@@ -190,11 +192,89 @@ double get_hospilization_age_co(int num)
 	return CONTROL;
 }
 
+double med_con_y = 3.024842;
+double med_con_n = 0.8206791;
+
 //child medical
 
-//adult medical
+double get_medical()
+{
+	return med_con_y;
+}
 
-//ethnic group
+double get_ethnicity_co(int num)
+{
+	switch (num)
+	{
+	case 0:
+		return 2.177051;
+		break;
+	case 1:
+		return 2.567965;
+		break;
+	case 2:
+		return 2.080266;
+		break;
+	case 3:
+		return 2.597607;
+		break;
+	default:
+		return 2.177051;
+		break;
+	}
+}
+
+/*double get_medical_child (int condition)
+{
+	switch (condition)
+	{
+	case 0:
+		return med_con_y + log(11.3);
+		break;
+	case 1:
+		return med_con_y + log(0.4);
+		break;
+	case 2:
+		return med_con_y + log(4.5);
+		break;
+	case 3:
+		return med_con_y + log(5);
+		break;
+	case 4:
+		return med_con_y + log(1.1);
+		break;
+	case 5:
+		return med_con_y + log(1);
+		break;
+	case 6:
+		return med_con_y + log(0.4);
+		break;
+	case 7:
+		return med_con_y + log(0.4);
+		break;
+	case 8:
+		return med_con_y + log(0.4);
+		break;
+	case 9:
+		return med_con_n;
+		break;
+
+	case 10:
+		return med_con_y + log(0.4);
+		break;
+	case 11:
+		return med_con_y + log(0.4);
+		break;
+	case 12:
+		return med_con_y + log(0.4);
+		break;
+	default:
+		return med_con_y;
+		break;
+	}
+}*/
+
+//adult medical
 
 //Dying
 double CONTROL_D = 0.1;

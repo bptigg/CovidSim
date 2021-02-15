@@ -2,20 +2,29 @@
 
 double calculations::calc_susceptibility(Actor::Age_Catagory age_range, unsigned int medical, unsigned int race)
 {
-    double age_co = log(get_hospilization_age_co((int)age_range));
-    double medical_co = log(1); // TEMP
-    double race_co = log(1); //TEMP
+    double age_co = 0;
+    double medical_co = 0;
+    double race_co = 0;
 
-    return (exp(age_co + medical_co + race_co) / (1+ exp(age_co + medical_co + race_co)));
+    if (age_range != 2)
+    {
+        age_co = get_hospilization_age_co((int)age_range);
+    }
+    if (medical != 9)
+    {
+        medical_co = get_medical();
+    }
+    if (race != 0)
+    {
+        race_co = get_ethnicity_co(race); //temp
+    }
+
+    return ((exp(age_co + medical_co + race_co) * exp(get_hospilization_age_co(2))) / (1+ (exp(age_co + medical_co + race_co) * exp(get_hospilization_age_co(2)))));
 }
 
 double calculations::calc_mortaility(Actor::Age_Catagory age_range, unsigned int medical, unsigned int race)
 {
-    double age_co = log(get_dying_age_co((int)age_range));
-    double medical_co = log(1); // TEMP
-    double race_co = log(1); //TEMP
-
-    return (exp(age_co + medical_co + race_co) / (1 + exp(age_co + medical_co + race_co)));
+    return (get_dying_age_co(age_range) / 1 + get_dying_age_co(age_range));
 }
 
 double calculations::infection_prob(double odds, Actor::Symptom_Severity modifier)
