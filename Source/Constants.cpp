@@ -139,26 +139,26 @@ std::vector <std::string> get_names()
 }
 
 //COVID VALUES (CURRENTLY TEMPORARY STAND IN VALUES)
-int INFECTION_TIME = 4320;
+int INFECTION_TIME = 2;
 int get_infection_time()
 {
 	return INFECTION_TIME;
 }
 
-double INFECTIVITY = 0.15;
+double INFECTIVITY = 0.2;
 double get_infect()
 {
 	return INFECTIVITY;
 }
 
-double RECOVERY = 0.2;
+double RECOVERY = 0.1;
 double get_recover()
 {
 	return RECOVERY;
 }
 
 //hostiplization
-double CONTROL = 0.5163976;
+double CONTROL = -3.731170026;
 
 double Z_FO = 0.5163976;
 double FI_SE = 0.08572764;
@@ -277,7 +277,7 @@ double get_ethnicity_co(int num)
 //adult medical
 
 //Dying
-double CONTROL_D = 0.1;
+double CONTROL_D = 0.002;
 double Z_FO_D = 0.12;
 double FI_SE_D = 0.0625;
 double FIF_SF_D = 30;
@@ -288,19 +288,19 @@ double get_dying_age_co(int num)
 	switch (num)
 	{
 	case 0:
-		return CONTROL_D * Z_FO_D;
+		return Z_FO_D;
 		break;
 	case 1:
-		return CONTROL_D * FI_SE_D;
+		return FI_SE_D;
 		break;
 	case 2:
 		return CONTROL_D;
 		break;
 	case 3:
-		return FIF_SF_D * CONTROL_D;
+		return FIF_SF_D;
 		break;
 	case 4:
-		return SF_PLUS_D * CONTROL_D;
+		return SF_PLUS_D;
 		break;
 	default:
 		return CONTROL_D;

@@ -251,6 +251,7 @@ void Model::RunModel()
 		// The actual model
 		//have a thread that finds agents.
 		bool model_end = false;
+		bool stay_home = false;
 		std::thread getagent(Model::get_agent, actor_vec, std::ref(model_end));
 		bool exit = false;
 		std::thread escape(Model::check_escape, std::ref(exit), std::ref(model_end));
@@ -293,6 +294,7 @@ void Model::RunModel()
 
 			if (day_count == 420 || day_count == 1320)
 			{
+				stay_home = false;
 				nick.world_task(Director::mandatory_task::idle, 0);
 				nick.world_task(Director::mandatory_task::sleep, 0);
 			}
@@ -306,6 +308,7 @@ void Model::RunModel()
 			}
 			if (day_count == 1020)
 			{
+				stay_home = true;
 				nick.world_task(Director::mandatory_task::go_home, 0);
 			}
 
@@ -315,6 +318,10 @@ void Model::RunModel()
 				{
 					for (int i = 0; i < actor_vec.size(); i++)
 					{
+						if (actor->Get_Location() == actor->House_Location() && stay_home == true)
+						{
+							continue;
+						}
 						actor_vec[i]->infected_this_turn = false;
 						if (actor_vec[i]->stage_check() == Actor::dead)
 						{
@@ -529,7 +536,7 @@ void Model::RunModel()
 					}
 				}
 
-				if (model_data.infected[i]->hospital == true)
+				if (model_data.infected[i]->hospital != true)
 				{
 					if (model_data.infected[i]->go_to_hospital() == true)
 					{

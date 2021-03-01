@@ -18,31 +18,31 @@ void Director::change_actor_location(Actor* actor, Task task, bool task_end)
 	auto [public_Buildings, education_Buildings, public_transport_building, house, generic_work] = task.location_type;
 	if (task_end != true)
 	{
-		if (public_Buildings != NULL)
+		if (std::get<0>(task.location_type) != NULL)
 		{
 			std::get<0>(task.location_type)->add_people_buiding(actor);
 			actor->set_location_state(Actor::public_building);
 			return;
 		}
-		if (education_Buildings != NULL)
+		if (std::get<1>(task.location_type) != NULL)
 		{
 			std::get<1>(task.location_type)->add_people_buiding(actor);
 			actor->set_location_state(Actor::work);
 			return;
 		}
-		if (public_transport_building != NULL)
+		if (std::get<2>(task.location_type) != NULL)
 		{
 			std::get<2>(task.location_type)->add_people_buiding(actor);
 			actor->set_location_state(Actor::work);
 			return;
 		}
-		if (house != NULL)
+		if (std::get<3>(task.location_type) != NULL)
 		{
 			std::get<3>(task.location_type)->add_people_buiding(actor);
 			actor->set_location_state(Actor::home);
 			return;
 		}
-		if (generic_work != NULL)
+		if (std::get<4>(task.location_type) != NULL)
 		{
 			std::get<4>(task.location_type)->add_people_buiding(actor);
 			actor->set_location_state(Actor::work);
@@ -51,29 +51,35 @@ void Director::change_actor_location(Actor* actor, Task task, bool task_end)
 	}
 	else
 	{
-		if (public_Buildings != NULL)
+		if (std::get<0>(task.location_type) != NULL)
 		{
 			std::get<0>(task.location_type)->remove_people_building(actor);
 			actor->set_location_state(Actor::outside);
-			public_Buildings->assigned_tasks = public_Buildings->assigned_tasks - 1;
+			std::get<0>(task.location_type)->assigned_tasks = std::get<0>(task.location_type)->assigned_tasks - 1;
 			return;
 		}
-		if (education_Buildings != NULL)
+		if (std::get<1>(task.location_type) != NULL)
 		{
 			std::get<1>(task.location_type)->remove_people_building(actor);
 			actor->set_location_state(Actor::outside);
-			education_Buildings->assigned_tasks = education_Buildings->assigned_tasks - 1;
+			std::get<1>(task.location_type)->assigned_tasks = std::get<1>(task.location_type)->assigned_tasks - 1;
 			return;
 		}
-		if (public_transport_building != NULL)
+		if (std::get<2>(task.location_type) != NULL)
 		{
-			std::get<2>(task.location_type)->add_people_buiding(actor);
+			std::get<2>(task.location_type)->remove_people_building(actor);
 			actor->set_location_state(Actor::outside);
 			return;
 		}
-		if (generic_work != NULL)
+		if (std::get<3>(task.location_type) != NULL)
 		{
-			std::get<4>(task.location_type)->add_people_buiding(actor);
+			std::get<3>(task.location_type)->remove_people_building(actor);
+			actor->set_location_state(Actor::outside);
+			return;
+		}
+		if (std::get<4>(task.location_type) != NULL)
+		{
+			std::get<4>(task.location_type)->remove_people_building(actor);
 			actor->set_location_state(Actor::outside);
 			return;
 		}
@@ -461,8 +467,8 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 		break;
 	}
 
-	int random_building = Random::random_number(0, public_buildings.size(), {});
-	if (random_building != public_buildings.size())
+	int random_building = Random::random_number(0, public_buildings.size() + 1, {});
+	if (random_building < public_buildings.size())
 	{
 		return { m_tiles[actor_tile]->Pub_buildings[random_building]->Get_Location(), m_tiles[actor_tile]->Pub_buildings[random_building] };
 	}
@@ -471,6 +477,11 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 		std::vector<std::vector<Public_Buildings*>> public_buildings_tile;
 		for (int32_t a = 0; a < m_tiles.size(); a++)
 		{
+			if (a == actor_tile)
+			{
+				continue;
+			}
+
 			public_buildings.clear();
 			switch (location_type)
 			{
@@ -482,7 +493,7 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
 					}
 				}
-				public_buildings_tile.push_back(public_buildings);
+				//public_buildings_tile.push_back(public_buildings);
 				break;
 			case 1:
 				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
@@ -492,7 +503,7 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
 					}
 				}
-				public_buildings_tile.push_back(public_buildings);
+				//public_buildings_tile.push_back(public_buildings);
 				break;
 			case 2:
 				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
@@ -502,7 +513,7 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
 					}
 				}
-				public_buildings_tile.push_back(public_buildings);
+				//public_buildings_tile.push_back(public_buildings);
 				break;
 			case 3:
 				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
@@ -512,7 +523,7 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
 					}
 				}
-				public_buildings_tile.push_back(public_buildings);
+				//public_buildings_tile.push_back(public_buildings);
 				break;
 			case 4:
 				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
@@ -522,7 +533,7 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
 					}
 				}
-				public_buildings_tile.push_back(public_buildings);
+				//public_buildings_tile.push_back(public_buildings);
 				break;
 			case 5:
 				for (int i = 0; i < m_tiles[a]->Pub_buildings.size(); i++)
@@ -532,8 +543,11 @@ std::tuple<std::tuple<int, int, int>, Public_Buildings*> Director::public_task_s
 						public_buildings.push_back(m_tiles[a]->Pub_buildings[i]);
 					}
 				}
-				public_buildings_tile.push_back(public_buildings);
 				break;
+			}
+			if (public_buildings.size() != 0)
+			{
+				public_buildings_tile.push_back(public_buildings);
 			}
 		}
 		bool empty_vec = true;
@@ -656,29 +670,8 @@ void Director::request_task(Actor* requestee)
 		int tile_number = std::get<2>(requestee->Get_Location());
 		auto [location, building] = public_task_setup(tile_number, (Tasks::Destination_Types)task_value);
 		int task_length = Random::random_number(20, 300, {});
-		if (building == NULL)
+		if (building == NULL || building->closed == true)
 		{
-			int num = Random::random_number(0, 1, {});
-			if (num == 1)
-			{
-				go_home(requestee);
-			}
-			return;
-		}
-		if (building->closed == true)
-		{
-			return;
-		}
-		Task* task = new Task;
-		task->destination = (Tasks::Destination_Types)task_value;
-		task->location_type = { building, NULL, NULL, NULL, NULL };
-		task->location = location;
-		task->task_length = task_length;
-		building->assigned_tasks = building->assigned_tasks + 1;
-		if (building->assigned_tasks >= building->Get_capacity() + 1)
-		{
-			delete task;
-			
 			int num = Random::random_number(0, 1, {});
 			if (num == 1)
 			{
@@ -687,8 +680,27 @@ void Director::request_task(Actor* requestee)
 		}
 		else
 		{
-			m_current_tasks.push_back({ task, requestee, 0 });
-			requestee->set_state(Actor::waiting);
+			Task* task = new Task;
+			task->destination = (Tasks::Destination_Types)task_value;
+			task->location_type = { building, NULL, NULL, NULL, NULL };
+			task->location = location;
+			task->task_length = task_length;
+			if (building->assigned_tasks >= building->Get_capacity() + 1)
+			{
+				delete task;
+
+				int num = Random::random_number(0, 1, {});
+				if (num == 1)
+				{
+					go_home(requestee);
+				}
+			}
+			else
+			{
+				building->assigned_tasks = building->assigned_tasks + 1;
+				m_current_tasks.push_back({ task, requestee, 0 });
+				requestee->set_state(Actor::waiting);
+			}
 		}
 	}
 }
