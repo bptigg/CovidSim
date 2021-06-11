@@ -287,10 +287,12 @@ bool Actor::A_star_algorithim(Transport_Net* network, Matrix<int> tile_matrix)
 					break;
 				}
 			}
+			delete open_list[i].second;
 			open_list.erase(open_list.begin() + i);
 		}
 		else
 		{
+			delete open_list[0].second;
 			open_list.erase(open_list.begin());
 			if (open_list.size() == 0)
 			{

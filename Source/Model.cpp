@@ -298,13 +298,16 @@ void Model::RunModel()
 				nick.world_task(Director::mandatory_task::idle, 0);
 				nick.world_task(Director::mandatory_task::sleep, 0);
 			}
-			if (day_count == 480 || day_count == 780)
+			if (count % 8640 != 0 || count % 10080 != 0)
 			{
-				nick.world_task(Director::mandatory_task::go_to_work, 720 - 240);
-			}
-			if (day_count == 720 || day_count == 1020)
-			{
-				nick.world_task(Director::mandatory_task::idle, 0);
+				if (day_count == 480 || day_count == 780)
+				{
+					nick.world_task(Director::mandatory_task::go_to_work, 240);
+				}
+				if (day_count == 720 || day_count == 1020)
+				{
+					nick.world_task(Director::mandatory_task::idle, 0);
+				}
 			}
 			if (day_count == 1020)
 			{
